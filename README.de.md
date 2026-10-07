@@ -260,8 +260,8 @@ $DSH_HOME/memoir/          ← Standardort; über memoryDir änderbar
 
 ## ❓ Häufige Fragen
 
-**Worin unterscheidet es sich von `dsh-mneme`?**
-Sie decken verschiedene Ebenen ab. mneme pflegt **kurzfristiges, prozedurales** Gedächtnis (technische Details, Fallstricke, Projektfortschritt); Memoir pflegt die **langfristige, makroskopische** Ebene (wer der Nutzer ist, wer der Assistent ist, was läuft, welche großen Entscheidungen fielen). Beide bestehen nebeneinander, die Daten sind völlig getrennt.
+**Kollidiert es mit anderen Gedächtnisfunktionen?**
+Nein. Memoir behandelt nur die **langfristige, makroskopische** Ebene — wer der Nutzer ist, wer der Assistent ist, was läuft, welche großen Entscheidungen fielen. Kurzfristiges und Prozedurales (technische Details, Fallstricke, Fortschrittsprotokolle) liegt außerhalb und wird hier nie geschrieben. Die Daten liegen in einem eigenen Verzeichnis, ohne systemübergreifendes Lesen oder Schreiben.
 
 **Warum stehen keine technischen Details in meinem Heft?**
 Absicht. Technische Details begraben die Karte „Zum Nutzer“ unter zwanzig Kommandozeilen, und dann liest sie niemand. Das gehört zu einem anderen Gedächtnissystem.

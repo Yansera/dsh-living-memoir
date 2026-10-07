@@ -260,8 +260,8 @@ $DSH_HOME/memoir/          ← emplacement par défaut ; modifiable via memoryDi
 
 ## ❓ Questions fréquentes
 
-**Quelle différence avec `dsh-mneme` ?**
-Ils couvrent des couches différentes. mneme gère la mémoire **court terme et procédurale** (détails techniques, pièges, avancement des projets) ; Memoir gère la couche **long terme et macroscopique** (qui est l'utilisateur, qui est l'assistant, ce qui est en cours, quelles grandes décisions ont été prises). Les deux coexistent et leurs données sont totalement séparées.
+**Entrera-t-il en conflit avec d'autres fonctions de mémoire ?**
+Non. Memoir ne traite que la couche **long terme et macroscopique** — qui est l'utilisateur, qui est l'assistant, ce qui est en cours, quelles grandes décisions ont été prises. Le contenu court terme et procédural (détails techniques, pièges, journaux d'avancement) est hors périmètre et n'est jamais écrit ici. Ses données vivent dans leur propre dossier, sans lecture ni écriture croisées.
 
 **Pourquoi aucun détail technique dans mon carnet ?**
 C'est voulu. Le détail technique ensevelit la fiche « À propos de l'utilisateur » sous vingt lignes de commandes, et plus personne ne la lit. Cela relève d'un autre système de mémoire.

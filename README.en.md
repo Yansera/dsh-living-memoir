@@ -260,8 +260,8 @@ $DSH_HOME/memoir/          ← default; change it with memoryDir
 
 ## ❓ FAQ
 
-**How is this different from `dsh-mneme`?**
-They cover different layers. mneme handles **short-term, procedural** memory (technical details, pitfalls, project progress); Memoir handles the **long-term, high-level** layer (who the user is, who the assistant is, what's in flight, which big calls were made). They coexist, and their data is completely separate.
+**Will it clash with other memory features in my setup?**
+No. Memoir only handles the **long-term, high-level** layer — who the user is, who the assistant is, what's in flight, which big calls were made. Short-term and procedural content (technical details, pitfalls, progress logs) is out of scope and never written here. Its data lives in its own directory, with no reads or writes across systems.
 
 **Why is there no technical detail in my book?**
 On purpose. Technical detail buries the "About the user" card under twenty command lines and then nobody reads it. That belongs to another memory system.

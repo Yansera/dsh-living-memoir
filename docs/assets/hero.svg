@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 452" width="900" height="452" role="img" aria-label="Memoir: one Markdown file per category, three layers deep, with a dedicated page in the GUI">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 452" width="900" height="452" role="img" aria-label="Memoir: one Markdown file per category, three layers deep, with a dedicated page in the GUI" style="max-width:100%;height:auto">
   <style>
     text { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Noto Sans", sans-serif; }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }

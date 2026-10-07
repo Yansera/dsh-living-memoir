@@ -97,7 +97,7 @@ web boot: 1 entry did not activate
 
 `src/client.js` 第一行声明的 `id` 会被 client-modules 当作 factory 的注册键，**它必须等于 `package.json` 的 `name`**。两者不一致时注册键对不上，浏览器半直接装配失败——而且失败发生在启动阶段，整个界面都渲染不出来（侧边栏、会话列表全是空的，看起来像数据丢了，其实只是没渲染）。
 
-对照：`@modusensus/dsh-mneme` 的 bundle id 就是 `"@modusensus/dsh-mneme"`。
+对照：已发布的 scoped 插件，bundle id 就是它们各自的完整包名（`@scope/name` 形式）。
 
 所以改包名时，除 `package.json` / `cordis.patch.yml` / README / `scripts/sync.ps1` 之外，**别忘了 `src/client.js` 的 `id`**，并同步更新 `test/client.test.mjs` 里对应的断言。
 
