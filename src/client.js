@@ -8,7 +8,9 @@
  * 手写的 ModuleLoader bundle —— 不需要构建步骤。
  */
 window.__ModuleLoader__.load({
-  id: "dsh-memoir",
+  // bundle id 必须跟包名一致：client-modules 按它注册 factory，
+  // 对不上（或与另一份 bundle 撞名）会在启动时报 duplicate factory registration。
+  id: "@yansera/dsh-memoir",
   factory: (require) => {
     var module = { exports: {} };
     var exports = module.exports;

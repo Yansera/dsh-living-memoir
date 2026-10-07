@@ -149,7 +149,7 @@ check("client.js 是 ModuleLoader bundle（无构建步骤）", code.includes("w
 new Function(code)();
 
 const loaded = globalThis.window.__loaded;
-check("bundle 声明了 id", Boolean(loaded) && loaded.id === "dsh-memoir", loaded && loaded.id);
+check("bundle 声明的 id 与包名一致（client-modules 靠它注册 factory）", Boolean(loaded) && loaded.id === "@yansera/dsh-memoir", loaded && loaded.id);
 
 const required = [];
 const mod = loaded.factory((name) => {
