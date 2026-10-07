@@ -1,11 +1,11 @@
-# dsh-memoir — bundle patch layer
+# @yansera/dsh-memoir — bundle patch layer
 #
-# 让本包成为标准的 profile bundle：`dsh plugin --profile <p> add dsh-memoir`
+# 让本包成为标准的 profile bundle：`dsh plugin --profile <p> add @yansera/dsh-memoir`
 # 之后由这一层自动挂载，无需再往 profile 的 cordis.patch.yml 手写挂载行
 # （重复挂载会造出两个 loader entry 并中止启动）。
 - insert:
     - id: memoir
-      name: 'dsh-memoir'
+      name: '@yansera/dsh-memoir'
       config:
         # 记忆库目录；留空则用 $DSH_HOME/memoir
         memoryDir: ''

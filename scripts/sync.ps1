@@ -1,4 +1,4 @@
-﻿<#
+<#
   把 dsh-memoir 的源码同步到 profile 的安装位置。
 
   为什么需要它：pnpm 用 `file:` 装本地包时是**硬链接**，用编辑器改写源文件会断开
@@ -15,7 +15,7 @@ param([string]$Profile = 'desktop')
 
 $ErrorActionPreference = 'Stop'
 $src = Split-Path $PSScriptRoot -Parent
-$dst = Join-Path "D:\dsh\profiles\$Profile\node_modules" 'dsh-memoir'
+$dst = Join-Path "D:\dsh\profiles\$Profile\node_modules" '@yansera\dsh-memoir'
 
 if (-not (Test-Path $dst)) {
   Write-Host "安装位置不存在：$dst" -ForegroundColor Red
