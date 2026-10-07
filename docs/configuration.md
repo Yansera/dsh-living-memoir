@@ -4,7 +4,7 @@
 
 ```yaml
 - id: memoir
-  name: 'dsh-memoir'
+  name: '@yansera/dsh-memoir'
   config:
     memoryDir: ''              # 留空 = $DSH_HOME/memoir
     injectIndex: true
@@ -15,12 +15,12 @@
     distillMaxItems: 60
     distillMaxTokens: 8000
     distillReasoningEffort: off
-    memoryLanguage: ''       # 记忆内容用哪种语言写；留空=不限制
-
-> 第一次运行时的默认值是**英文界面 + 英文记忆**（面向公开分发）；改过就以 `.settings.json` 为准，选「跟随宿主 / 不限制」会如实存成空串。
+    memoryLanguage: ''         # 记忆内容用哪种语言写；留空 = 不限制
     pageEntryLimit: 12
     bookEntryLimit: 40
 ```
+
+**页面上改的设置存在记忆库目录的 `.settings.json`**，字段见 README 的「页面上改的设置」一节。第一次运行时的默认值是英文界面 + 英文记忆；一旦文件存在就以文件为准。
 
 ## 记忆库
 
