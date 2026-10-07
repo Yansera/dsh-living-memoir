@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" width="900" height="340" role="img" aria-label="Three write paths feed one living document; a capacity trigger forces a tidy-up instead of endless growth" style="max-width:100%;height:auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" width="900" height="340" style="max-width:100%;height:auto" role="img" aria-label="Three write paths feed one living document; a capacity trigger forces a tidy-up">
   <style>
     text { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Noto Sans", sans-serif; }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
     .t { font-size: 13px; font-weight: 600; fill: #1f2328; }
     .d { font-size: 11.5px; fill: #656d76; }
-    .d2 { font-size: 11px; fill: #8c959f; }
+    .d2 { font-size: 10.5px; fill: #8c959f; }
     .label { font-size: 10.5px; font-weight: 600; fill: #8c959f; letter-spacing: .09em; }
     .badgetext { font-size: 11px; font-weight: 600; fill: #0969da; }
     .arrow { stroke: #8c959f; stroke-width: 1.6; fill: none; }
@@ -14,64 +14,52 @@
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#8c959f"/>
     </marker>
   </defs>
-
   <rect width="900" height="340" fill="#ffffff"/>
   <text class="label" x="34" y="34">THREE WRITE PATHS</text>
   <text class="label" x="330" y="34">ONE EDITOR</text>
   <text class="label" x="640" y="34">ONE LIVING DOCUMENT</text>
-
-  <!-- three inputs -->
   <rect x="34" y="52" width="212" height="52" rx="10" fill="#ffffff" stroke="#d0d7de" stroke-width="1.5"/>
   <text class="t" x="54" y="74">Model tools</text>
   <text class="d mono" x="54" y="92">memoir_note</text>
-  <text class="d2" x="150" y="74">the model decides</text>
-
+  <text class="d2" x="150" y="74">model decides</text>
   <rect x="34" y="120" width="212" height="52" rx="10" fill="#ffffff" stroke="#d0d7de" stroke-width="1.5"/>
   <text class="t" x="54" y="142">The page</text>
   <text class="d mono" x="54" y="160">GUI / edit the .md</text>
-  <text class="d2" x="182" y="142">instant</text>
-
+  <text class="d2" x="188" y="142">instant</text>
   <rect x="34" y="188" width="212" height="52" rx="10" fill="#ffffff" stroke="#d0d7de" stroke-width="1.5"/>
   <text class="t" x="54" y="210">Every turn</text>
   <text class="d mono" x="54" y="228">turn/end + 20s</text>
-  <text class="d2" x="168" y="210">automatic</text>
-
-  <!-- arrows -->
+  <text class="d2" x="172" y="210">automatic</text>
   <line class="arrow" x1="250" y1="78" x2="326" y2="140" marker-end="url(#ah)"/>
   <line class="arrow" x1="250" y1="146" x2="326" y2="150" marker-end="url(#ah)"/>
   <line class="arrow" x1="250" y1="214" x2="326" y2="160" marker-end="url(#ah)"/>
-
-  <!-- the editor -->
   <rect x="330" y="52" width="240" height="188" rx="12" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
-  <text class="t" x="352" y="80">Rewrite = an editor, not a clerk</text>
-  <text class="d" x="352" y="104">reads the whole book + this stretch</text>
-  <text class="d" x="352" y="124">→ returns the complete rewrite</text>
-  <line x1="352" y1="140" x2="548" y2="140" stroke="#e4e8ec" stroke-width="1"/>
-  <text class="d" x="352" y="162">merge synonyms · shorten</text>
-  <text class="d" x="352" y="182">drop stale · reshape categories</text>
-  <text class="d" x="352" y="208">Length follows content, not history</text>
-  <text class="d2" x="352" y="228">Reasoning off by default; budget scales with size</text>
-
+  <text class="t" x="352" y="78">An editor, not a clerk</text>
+  <text class="d" x="352" y="102">reads the whole book +</text>
+  <text class="d" x="352" y="120">this stretch → full rewrite</text>
+  <line x1="352" y1="134" x2="548" y2="134" stroke="#e4e8ec" stroke-width="1"/>
+  <text class="d" x="352" y="156">merge synonyms · shorten</text>
+  <text class="d" x="352" y="174">drop stale · reshape sections</text>
+  <text class="d" x="352" y="196">Length follows content,</text>
+  <text class="d" x="352" y="214">not history</text>
+  <text class="d2" x="352" y="234">Reasoning off by default;</text>
+  <text class="d2" x="352" y="248" font-size="10.5">budget scales with size</text>
   <line class="arrow" x1="574" y1="146" x2="636" y2="146" marker-end="url(#ah)"/>
-
-  <!-- Memoir -->
   <rect x="640" y="52" width="226" height="188" rx="12" fill="#ffffff" stroke="#54aeff" stroke-width="1.6"/>
-  <text class="t mono" x="660" y="80"># Things in flight</text>
-  <text class="t mono" x="660" y="104" font-size="12">## Memoir</text>
-  <text class="d" x="660" y="124">· a short Markdown living document</text>
-  <text class="d" x="660" y="142">· only the long-term layer</text>
-  <text class="t mono" x="660" y="168" font-size="12">## Net: semantic topology</text>
-  <text class="d" x="660" y="188">· topology carries meaning</text>
-  <text class="d2" x="660" y="216">Plain text · hand-editable · no database</text>
-
-  <!-- capacity trigger -->
-  <rect x="330" y="262" width="536" height="52" rx="10" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.4"/>
-  <text class="t" x="352" y="284">Capacity trigger</text>
-  <text class="d" x="352" y="302">Past 12 entries in one category, or 40 in the book → this rewrite carries a forced tidy-up: merge, shorten, split into sections, fall back under the limits.</text>
-
-  <line class="arrow" x1="330" y1="288" x2="292" y2="288" marker-end="url(#ah)" stroke-dasharray="0"/>
-  <rect x="34" y="262" width="212" height="52" rx="10" fill="#ffffff" stroke="#d0d7de" stroke-width="1.5"/>
+  <text class="t mono" x="660" y="78"># Things in flight</text>
+  <text class="t mono" x="660" y="102" font-size="12">## Memoir</text>
+  <text class="d" x="660" y="122">· a short Markdown</text>
+  <text class="d" x="660" y="140">  living document</text>
+  <text class="d" x="660" y="162">· only the long-term layer</text>
+  <text class="t mono" x="660" y="188" font-size="12">## Net: semantic topology</text>
+  <text class="d" x="660" y="208">· topology carries meaning</text>
+  <text class="d2" x="660" y="228">Plain text · hand-editable</text>
+  <rect x="330" y="262" width="536" height="60" rx="10" fill="#fff8c5" stroke="#d4a72c" stroke-width="1.4"/>
+  <text class="t" x="352" y="282">Capacity trigger</text>
+  <text class="d" x="352" y="300">Past 12 entries in a category, or 40 in the book —</text>
+  <text class="d" x="352" y="316">this rewrite carries a forced tidy-up: merge,</text>
+  <rect x="34" y="262" width="212" height="60" rx="10" fill="#ffffff" stroke="#d0d7de" stroke-width="1.5"/>
   <text class="badgetext" x="54" y="284">Thresholds are config</text>
   <text class="d mono" x="54" y="302">pageEntryLimit: 12</text>
-  <text class="d mono" x="150" y="302">bookEntryLimit: 40</text>
+  <text class="d mono" x="54" y="318">bookEntryLimit: 40</text>
 </svg>
