@@ -16,6 +16,8 @@
     distillMaxTokens: 8000
     distillReasoningEffort: off
     memoryLanguage: ''       # 记忆内容用哪种语言写；留空=不限制
+
+> 第一次运行时的默认值是**英文界面 + 英文记忆**（面向公开分发）；改过就以 `.settings.json` 为准，选「跟随宿主 / 不限制」会如实存成空串。
     pageEntryLimit: 12
     bookEntryLimit: 40
 ```

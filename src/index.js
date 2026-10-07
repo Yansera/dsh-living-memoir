@@ -659,6 +659,14 @@ async function readJsonBody(req) {
 const SETTINGS_FILE = ".settings.json";
 
 /**
+ * 第一次运行（还没有 `.settings.json`）时的默认值。
+ *
+ * 这个包是公开分发的，所以默认英文界面 + 英文记忆内容。
+ * 用户改过就以文件为准——选「跟随宿主 / 不限制」会如实存成空串，不会被这里盖回去。
+ */
+const SETTINGS_DEFAULTS = { enabled: true, locale: "en", memoryLanguage: "en" };
+
+/**
  * 运行时可改设置的读写。
  *
  * 存在记忆库目录里而不是包目录：换 profile 不丢、升级插件也不会把用户设置覆盖掉。
@@ -671,9 +679,10 @@ function createRuntimeSettings(dirOf) {
   const read = () => {
     try {
       const parsed = JSON.parse(readFileSync(fileOf(), "utf8"));
-      return parsed && typeof parsed === "object" ? parsed : {};
+      return parsed && typeof parsed === "object" ? parsed : { ...SETTINGS_DEFAULTS };
     } catch {
-      return {};
+      // 文件还不存在 = 第一次运行，用面向公开分发的默认值。
+      return { ...SETTINGS_DEFAULTS };
     }
   };
   const write = (patch) => {

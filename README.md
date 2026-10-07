@@ -222,6 +222,8 @@ dsh plugin --profile desktop add 'file:D:\path\to\dsh-memoir'
     distillMaxTokens: 8000     # 输出预算下限（会按记忆规模自动往上抬）
     distillReasoningEffort: off # 改写不需要推理，关掉思考把预算全留给正文
     memoryLanguage: ''       # 记忆内容用哪种语言写；留空=不限制
+
+> 第一次运行时的默认值是**英文界面 + 英文记忆**（面向公开分发）；改过就以 `.settings.json` 为准，选「跟随宿主 / 不限制」会如实存成空串。
     pageEntryLimit: 12         # 单个分类超过这么多条 → 触发强制整理
     bookEntryLimit: 40         # 整本超过这么多条 → 触发强制整理
 ```
