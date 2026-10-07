@@ -368,7 +368,7 @@ function serializeCategory(category, entries) {
 }
 
 /**
- * 记忆库：一个目录 + 六个分类文件。
+ * 记忆库：一个目录 + 若干分类文件。
  * 每次读写都直接落盘，不做缓存——文件都很小，换来的是「手工改了文件页面立刻就能看到」。
  */
 function createStore(memoryDir) {
