@@ -79,7 +79,7 @@ Nichts zu konfigurieren. Danach:
 ## 🧱 Drei Ebenen, nie mehr
 
 ```
-# Laufende Vorhaben              ← Ebene 1: Kategorie. Groß und wenige
+# Laufende Vorhaben              ← Ebene 1: Kategorie. Struktur und Anzahl folgen dem Inhalt
 
 <!-- Projekte, aktueller Stand · von Hand editierbar -->
 

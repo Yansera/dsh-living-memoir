@@ -79,7 +79,7 @@ Rien à configurer. Ensuite :
 ## 🧱 Trois niveaux, jamais plus
 
 ```
-# Chantiers en cours              ← niveau 1 : catégorie. Peu nombreuses et larges
+# Chantiers en cours              ← niveau 1 : catégorie. Leur structure et leur nombre suivent le contenu
 
 <!-- projets, étape actuelle · modifiable à la main -->
 

@@ -79,7 +79,7 @@ Nothing to configure. From here on:
 ## 🧱 Three layers, never more
 
 ```
-# Things in flight                ← layer 1: category. Keep it big and few
+# Things in flight                ← layer 1: category. Structure and count follow the content
 
 <!-- projects, current stage · editable by hand -->
 
