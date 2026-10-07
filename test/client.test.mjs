@@ -197,7 +197,22 @@ const ctx = {
   },
 };
 mod.apply(ctx);
-check("注册了中英语言包", Boolean(registered.locales) && registered.locales.ns === "memoir" && Boolean(registered.locales.dicts.zh && registered.locales.dicts.en));
+check("注册了 memoir 命名空间的语言包", Boolean(registered.locales) && registered.locales.ns === "memoir", registered.locales?.ns);
+const LANGS = ["zh", "en", "fr", "de", "ja"];
+const dicts = registered.locales?.dicts ?? {};
+check("五种语言都注册了", LANGS.every((l) => Boolean(dicts[l])), Object.keys(dicts));
+// 缺键会静默回落到宿主语言，界面上会突然冒出另一种语言——所以键必须逐一对齐。
+for (const lang of LANGS.slice(1)) {
+  const missing = Object.keys(dicts.zh ?? {}).filter((k) => !(k in (dicts[lang] ?? {})));
+  const extra = Object.keys(dicts[lang] ?? {}).filter((k) => !(k in (dicts.zh ?? {})));
+  check(`${lang} 的键与 zh 完全一致（缺 ${missing.length} / 多 ${extra.length}）`, missing.length === 0 && extra.length === 0, { missing, extra });
+}
+check("字典不是空的", Object.keys(dicts.zh ?? {}).length > 15, Object.keys(dicts.zh ?? {}).length);
+check(
+  "设置面板的文案键齐全",
+  ["settings", "enabled", "enabledHint", "modelSection", "provider", "model", "effort", "language", "langAuto"].every((k) => k in (dicts.zh ?? {})),
+  Object.keys(dicts.zh ?? {})
+);
 check("语言包走 ctx.effect", registered.effects === 1, registered.effects);
 
 const bySlot = Object.fromEntries(registered.slots.map((s) => [s.name, s.entries]));

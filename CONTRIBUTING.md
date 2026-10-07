@@ -42,7 +42,7 @@ scripts/   同步脚本与对着运行中客户端跑的冒烟
 ## 跑测试
 
 ```sh
-npm test                # 全部 215 项
+npm test                # 全部 222 项
 npm run test:store      # 存储层：解析、去重、移动、搜索、截断、注入文本
 npm run test:plugin     # host 端：注册面、工具执行、系统提示、HTTP 路由
 npm run test:client     # 页面半：用 React 替身渲染真 bundle，模拟点击并断言请求

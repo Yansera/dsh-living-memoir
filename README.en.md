@@ -4,7 +4,7 @@
 
 [![npm](https://img.shields.io/npm/v/@yansera/dsh-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-memoir)
 [![CI](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml/badge.svg)](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-215%20passing-2da44e)](test/)
+[![tests](https://img.shields.io/badge/tests-222%20passing-2da44e)](test/)
 [![license](https://img.shields.io/badge/license-MIT-8250df)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20.18-339933)](package.json)
 
@@ -283,7 +283,7 @@ No. Apart from the host's `llm` capability for rewriting, it makes no requests o
 ## 🛠 Development
 
 ```sh
-npm test                # all 215 offline tests
+npm test                # all 222 offline tests
 npm run test:store      # storage: parsing, dedupe, moves, search, truncation, inject text
 npm run test:plugin     # host half: registrations, tool calls, system prompt, HTTP routes
 npm run test:client     # browser half: renders the real bundle with a React stand-in
