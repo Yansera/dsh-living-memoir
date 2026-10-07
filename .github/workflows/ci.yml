@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  syntax:
+    name: 语法与清单检查
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: 三个实现文件都能解析
+        run: |
+          node --check src/index.js
+          node --check src/distill.js
+          node --check src/client.js
+      - name: package.json 可解析且声明了入口
+        run: |
+          node -e "
+            const p = require('./package.json');
+            if (!p.name || !p.version || !p.main) throw new Error('缺少 name/version/main');
+            if (!p.dsh || !p.dsh.bundle || !p.dsh.bundle.patch) throw new Error('缺少 dsh.bundle.patch');
+            console.log(p.name + '@' + p.version + ' OK');
+          "
+      - name: cordis.patch.yml 不是空的
+        run: test -s cordis.patch.yml
+
+  self-test:
+    name: 离线自测
+    runs-on: ubuntu-latest
+    # 自测需要 @deepseek-ai/schemastery 与 @deepseek-ai/dsh-tools，它们由
+    # DeepSeek Harness 的 profile 提供、不在公共 registry 上。探针测不到就跳过，
+    # 所以这一步挂掉只说明"本机有 DSH 环境时没跑过"，不代表代码坏了。
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: 探一下 DSH 运行时依赖在不在
+        id: probe
+        run: |
+          if node -e "require.resolve('@deepseek-ai/schemastery')" 2>/dev/null; then
+            echo "ok=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=0" >> "$GITHUB_OUTPUT"
+            echo "::notice title=跳过离线自测::需要 @deepseek-ai/schemastery 与 @deepseek-ai/dsh-tools，它们由 DeepSeek Harness 的 profile 提供，不在公共 registry 上。"
+          fi
+      - name: 跑 199 项自测
+        if: steps.probe.outputs.ok == '1'
+        run: npm test

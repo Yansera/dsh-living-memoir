@@ -1,0 +1,41 @@
+# 依赖
+node_modules/
+.pnpm-store/
+
+# 构建产物与缓存
+dist/
+*.tsbuildinfo
+.cache/
+
+# 编辑器与系统
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 日志
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# 本地环境与密钥
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+known_hosts
+
+# 临时文件：写入模式用 .tmp-<pid> 做原子替换，别让它们进版本库
+*.tmp-*
+*.tmp
+
+# 记忆库：如果有人把 memoryDir 指到仓库内，那是用户数据，不该进版本库
+memoir/

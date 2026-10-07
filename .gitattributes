@@ -1,0 +1,18 @@
+# 仓库里统一 LF，别让 Git 按平台自动转换。
+# 不设这个的话 Windows 上 git add 会警告「LF will be replaced by CRLF」，
+# 提交进去的行尾就跟 .editorconfig 声明的对不上了。
+* text=auto eol=lf
+
+# Windows 脚本用 CRLF（PowerShell 5.1 的习惯），BOM 由 .editorconfig 管
+*.ps1 text eol=crlf
+
+# 二进制
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.zip binary

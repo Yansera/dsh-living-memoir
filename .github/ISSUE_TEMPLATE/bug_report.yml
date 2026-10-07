@@ -1,0 +1,77 @@
+name: 缺陷报告
+description: 报告一个可复现的问题
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。请尽量填全，尤其是**版本**和**复现步骤** —— 记忆册的行为跟你 profile 的配置、模型选择都有关系。
+
+  - type: input
+    id: version
+    attributes:
+      label: 插件版本
+      description: |
+        在客户端的「插件」设置页能看到；或者跑
+        `curl http://127.0.0.1:<端口>/api/dsh-memoir/state`，看 `runtime.version`。
+      placeholder: 例如 1.0.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: profile
+    attributes:
+      label: 跑在哪个 profile
+      options:
+        - desktop（桌面客户端）
+        - web（Web 端）
+        - 两个都试过
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: 发生了什么
+      description: 你看到的实际现象
+    validations:
+      required: true
+
+  - type: textarea
+    id: expect
+    attributes:
+      label: 你预期发生什么
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: 复现步骤
+      placeholder: |
+        1. 打开「记忆册」页面
+        2. …
+    validations:
+      required: true
+
+  - type: textarea
+    id: diag
+    attributes:
+      label: 诊断信息（可选，但自动改写的问题几乎全靠它）
+      description: |
+        `curl http://127.0.0.1:<端口>/api/dsh-memoir/state` 里的 `distill` 字段。
+        其中 `lastBlocks` 能直接说明模型有没有真的产出正文：
+        `reasoning` = 只有推理块（正文空体），`text` = 正常。
+      render: json
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 提交前确认
+      options:
+        - label: 我看过 README 的「配置」一节
+        - label: 我的记忆库里没有放敏感信息，issue 里也没贴
+          required: true

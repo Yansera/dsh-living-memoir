@@ -1,0 +1,32 @@
+# dsh-memoir — bundle patch layer
+#
+# 让本包成为标准的 profile bundle：`dsh plugin --profile <p> add dsh-memoir`
+# 之后由这一层自动挂载，无需再往 profile 的 cordis.patch.yml 手写挂载行
+# （重复挂载会造出两个 loader entry 并中止启动）。
+- insert:
+    - id: memoir
+      name: 'dsh-memoir'
+      config:
+        # 记忆库目录；留空则用 $DSH_HOME/memoir
+        memoryDir: ''
+        # 是否把「记忆目录」注入系统提示（每次组装实时求值）
+        injectIndex: true
+        # 注入时最多带多少条高重要度条目
+        maxInjectEntries: 12
+        # 每轮对话结束后自动提炼记忆（第三条写入通道）
+        autoDistill: true
+        # 提炼前的安静等待（毫秒）：等对话停下来再跑，免得被切碎重复提炼
+        distillDebounceMs: 20000
+        # 新增对话少于这么多字符就跳过提炼
+        distillMinChars: 400
+        # 记忆册的条目总数上限（改写时提示模型控制规模）
+        distillMaxItems: 60
+        # 单个分类的条目软上限：超过就触发强制整理（合并 / 缩略 / 开小节）
+        pageEntryLimit: 12
+        # 整本的条目软上限：超过同样触发强制整理
+        bookEntryLimit: 40
+        # 改写输出的 token 下限（代码会按记忆规模自动往上抬）
+        distillMaxTokens: 8000
+        # 改写时的推理档位：改写是「整理」不是「解题」，思考型模型会把输出预算
+        # 全烧在推理上、正文空体（实测 4000 token 光推理就吃光），所以默认 off
+        distillReasoningEffort: off

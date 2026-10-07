@@ -1,0 +1,18 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+# Windows PowerShell 5.1 按 GBK 读没有 BOM 的脚本，中文注释会让它解析失败。
+# 这个编码要求不是风格偏好，是能不能跑起来的硬条件。
+[*.ps1]
+end_of_line = crlf
+charset = utf-8-bom
