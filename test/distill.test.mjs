@@ -166,7 +166,7 @@ llmShouldThrow = true;
 const failSession = makeSession("s3", makeEvents(12));
 handlers["session/event"](failSession, { type: "turn/end" });
 await wait(80);
-check("LLM 失败时仍走一次去掉 effort 的重试（与 mneme 的 dream 同款容错）", llmCalls === 2, llmCalls);
+check("LLM 失败时仍走一次去掉 effort 的重试（provider 不认这个字段时的容错）", llmCalls === 2, llmCalls);
 check("失败写进了日志", logs.some((l) => l.includes("自动提炼失败")), logs.slice(-3));
 llmShouldThrow = false;
 handlers["session/event"](failSession, { type: "turn/end" });

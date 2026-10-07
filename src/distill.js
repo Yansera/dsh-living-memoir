@@ -311,9 +311,9 @@ export function createDistiller({ ctx, store, resolveConfig }) {
     if (selected?.provider) base.provider = selected.provider;
     if (selected?.model) base.model = selected.model;
 
-    // 思考型模型会把 token 预算烧在推理上、正文空体——mneme 在 dream 里踩过
-    // 同一个坑（它为此专门配了 dreamReasoningEffort: low）。所以这里显式压低
-    // 推理档位；provider 不认这个字段时，去掉它重试一次。
+    // 思考型模型会把 token 预算烧在推理上、正文空体——本插件实测过一次：
+    // 整本改写量下光推理就把 4000 token 吃光，一个正文块都没吐出来。所以这里
+    // 显式压低推理档位；provider 不认这个字段时，去掉它重试一次。
     const effort = String(config.distillReasoningEffort ?? "off");
     const callStream = async (withEffort) => {
       const assembler = new BlockAssembler();
