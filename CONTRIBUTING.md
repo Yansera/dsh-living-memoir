@@ -85,6 +85,22 @@ pnpm 用 `file:` 装本地包时是**硬链接**，用编辑器改写源文件�
 - 术语保持一致：category 分类 / section 小节 / entry 条目
 - 中英混排的标点跟着目标语言走（法语用不换行空格，德语用 „ “ 引号）
 
+## ⚠ 改包名时，`src/client.js` 的 bundle id 必须一起改
+
+这是实测踩过的坑，代价是**整个客户端起不来**：
+
+```
+client-modules: duplicate factory registration for "dsh-memoir"
+web boot: 1 entry did not activate
+@yansera/dsh-memoir: import failed
+```
+
+`src/client.js` 第一行声明的 `id` 会被 client-modules 当作 factory 的注册键，**它必须等于 `package.json` 的 `name`**。两者不一致时注册键对不上，浏览器半直接装配失败——而且失败发生在启动阶段，整个界面都渲染不出来（侧边栏、会话列表全是空的，看起来像数据丢了，其实只是没渲染）。
+
+对照：`@modusensus/dsh-mneme` 的 bundle id 就是 `"@modusensus/dsh-mneme"`。
+
+所以改包名时，除 `package.json` / `cordis.patch.yml` / README / `scripts/sync.ps1` 之外，**别忘了 `src/client.js` 的 `id`**，并同步更新 `test/client.test.mjs` 里对应的断言。
+
 ## 提交约定
 
 - 一个提交只做一件事，信息用祈使句写清「做了什么」。
