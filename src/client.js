@@ -124,6 +124,9 @@ window.__ModuleLoader__.load({
       memoryLanguage: "记忆语言",
       memoryLanguageHint: "存进 md 里的字用哪种语言写；跟界面语言是两件事。",
       memoryLangAuto: "不限制（跟随对话）",
+      pickModel: "从宿主已注册的模型里选…",
+      noCatalog: "宿主还没注册任何模型，下面手动填",
+      pickModelHint: "下面这两个框也可以直接手填；点上面选一个会自动填进来。",
     };
     var en = {
       nav: "Memoir",
@@ -165,6 +168,9 @@ window.__ModuleLoader__.load({
       memoryLanguage: "Memory language",
       memoryLanguageHint: "Which language the saved text uses — separate from the interface language.",
       memoryLangAuto: "Unrestricted (follow the conversation)",
+      pickModel: "Pick a model your host already has…",
+      noCatalog: "No models registered yet — fill in below",
+      pickModelHint: "You can also type in the two fields below; picking above fills them for you.",
     };
     var fr = {
       nav: "Mémoire",
@@ -206,6 +212,9 @@ window.__ModuleLoader__.load({
       memoryLanguage: "Langue des souvenirs",
       memoryLanguageHint: "Langue du texte enregistré — distincte de la langue de l'interface.",
       memoryLangAuto: "Sans restriction (suivre la conversation)",
+      pickModel: "Choisir un modèle déjà enregistré…",
+      noCatalog: "Aucun modèle enregistré — remplissez ci-dessous",
+      pickModelHint: "Vous pouvez aussi remplir les deux champs ci-dessous ; choisir ci-dessus les remplit.",
     };
     var de = {
       nav: "Memoir",
@@ -247,6 +256,9 @@ window.__ModuleLoader__.load({
       memoryLanguage: "Sprache der Einträge",
       memoryLanguageHint: "Sprache des gespeicherten Texts — unabhängig von der Oberflächensprache.",
       memoryLangAuto: "Uneingeschränkt (dem Gespräch folgen)",
+      pickModel: "Ein bereits registriertes Modell wählen…",
+      noCatalog: "Noch kein Modell registriert — unten eintragen",
+      pickModelHint: "Die beiden Felder unten gehen auch von Hand; Auswahl oben füllt sie aus.",
     };
     var ja = {
       nav: "記憶帳",
@@ -288,6 +300,9 @@ window.__ModuleLoader__.load({
       memoryLanguage: "記憶の言語",
       memoryLanguageHint: "保存される本文の言語。表示言語とは別です。",
       memoryLangAuto: "制限なし（会話に合わせる）",
+      pickModel: "ホストに登録済みのモデルから選ぶ…",
+      noCatalog: "まだモデルがありません — 下に直接入力",
+      pickModelHint: "下の 2 つは直接入力もできます。上で選ぶと自動で入ります。",
     };
     var DICTS = { zh: zh, en: en, fr: fr, de: de, ja: ja };
 
@@ -349,6 +364,9 @@ window.__ModuleLoader__.load({
       var viewState = react.useState("list"); // "list" | "settings"
       var view = viewState[0];
       var setView = viewState[1];
+      var catalogState = react.useState([]);
+      var catalog = catalogState[0];
+      var setCatalog = catalogState[1];
       var settingsState = react.useState(null);
       var settings = settingsState[0];
       var setSettings = settingsState[1];
@@ -368,6 +386,26 @@ window.__ModuleLoader__.load({
       };
 
       var loadSettings = react.useCallback(function () {
+        // 宿主注册了哪些 provider / 模型——列成下拉，省得用户去背名字。
+        apiFetch(API + "/models")
+          .then(function (body) {
+            var flat = [];
+            for (var i = 0; i < (body.providers || []).length; i++) {
+              var prov = body.providers[i];
+              for (var j = 0; j < (prov.models || []).length; j++) {
+                var model = prov.models[j];
+                flat.push({
+                  value: prov.id + "|" + model.id,
+                  label: prov.name + " / " + model.name,
+                });
+              }
+            }
+            setCatalog(flat);
+          })
+          .catch(function () {
+            // 宿主没提供 llm（或列不出来）时退化成纯手填，不影响别的设置。
+            setCatalog([]);
+          });
         apiFetch(API + "/settings")
           .then(function (body) {
             setSettings(body.settings || {});
@@ -765,6 +803,29 @@ window.__ModuleLoader__.load({
           h("span", { className: "__mm_desc" }, t("enabledHint"))
         ),
         h("div", { className: "__mm_field" }, h("span", { className: "__mm_label" }, t("modelSection"))),
+        h(
+          "div",
+          { className: "__mm_field" },
+          h("span", { className: "__mm_desc" }, t("pickModelHint")),
+          h(
+            "select",
+            {
+              className: "__mm_select",
+              value: "",
+              disabled: saving || catalog.length === 0,
+              onChange: function (e) {
+                var picked = e.target.value;
+                if (!picked) return;
+                var parts = picked.split("|");
+                saveSettings({ distillProvider: parts[0], distillModel: parts[1] });
+              },
+            },
+            h("option", { value: "" }, catalog.length === 0 ? t("noCatalog") : t("pickModel")),
+            catalog.map(function (item) {
+              return h("option", { key: item.value, value: item.value }, item.label);
+            })
+          )
+        ),
         h(
           "div",
           { className: "__mm_field" },

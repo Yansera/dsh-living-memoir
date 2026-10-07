@@ -4,7 +4,7 @@
 
 [![npm](https://img.shields.io/npm/v/@yansera/dsh-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-memoir)
 [![CI](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml/badge.svg)](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-243%20passing-2da44e)](test/)
+[![tests](https://img.shields.io/badge/tests-247%20passing-2da44e)](test/)
 [![license](https://img.shields.io/badge/license-MIT-8250df)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20.18-339933)](package.json)
 
@@ -284,7 +284,7 @@ $DSH_HOME/memoir/          ← 既定の場所。memoryDir で変更可
 ## 🛠 開発
 
 ```sh
-npm test                # オフライン自測 243 項目
+npm test                # オフライン自測 247 項目
 npm run test:store      # 保存層：解析、重複排除、移動、検索、切り詰め
 npm run test:plugin     # ホスト側：登録、ツール実行、システムプロンプト、HTTP 経路
 npm run test:client     # ブラウザ側：React 代役で実バンドルを描画

@@ -65,6 +65,6 @@ jobs:
             echo "ok=0" >> "$GITHUB_OUTPUT"
             echo "::notice title=跳过离线自测::需要 @deepseek-ai/schemastery 与 @deepseek-ai/dsh-tools，它们由 DeepSeek Harness 的 profile 提供，不在公共 registry 上。"
           fi
-      - name: 跑 243 项自测
+      - name: 跑 247 项自测
         if: steps.probe.outputs.ok == '1'
         run: npm test

@@ -911,6 +911,42 @@ function apply(ctx, config) {
       },
     },
     {
+      // 宿主已经注册了哪些 provider、每个下面有哪些模型——页面上拿它做成下拉。
+      // 用户不该需要知道 provider 叫什么、模型 id 怎么写：DSH 里关联好了就该列出来。
+      kind: "exact",
+      path: `${API_PREFIX}/models`,
+      handler: async (_req, res) => {
+        try {
+          const llm = ctx.get?.("llm");
+          const providers = llm?.listProviders?.() ?? [];
+          const out = [];
+          for (const provider of providers) {
+            let models = [];
+            try {
+              models = (await llm.listModels(provider.id)) ?? [];
+            } catch {
+              // 单个 provider 列不出来（网关没起、没配 key）不该拖垮整个列表。
+              models = [];
+            }
+            out.push({
+              id: provider.id,
+              name: provider.name || provider.id,
+              models: models.map((model) => ({
+                id: model.id,
+                name: model.name || model.id,
+                description: model.description ?? "",
+                efforts: (model.reasoning?.efforts ?? []).map((effort) => effort.id),
+                defaultEffort: model.reasoning?.defaultEffort ?? "",
+              })),
+            });
+          }
+          sendJson(res, 200, { providers: out });
+        } catch (error) {
+          sendJson(res, 500, { error: String(error?.message ?? error) });
+        }
+      },
+    },
+    {
       kind: "exact",
       path: `${API_PREFIX}/entry`,
       handler: async (req, res) => {

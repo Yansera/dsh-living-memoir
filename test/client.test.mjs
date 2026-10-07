@@ -481,6 +481,7 @@ await settle();
 const inSettings = render(Panel, { t, onClose: () => {} });
 const settingsText = textOf(inSettings);
 check("点开后去拉 /settings", fetchCalls.some((c) => String(c.url).endsWith("/api/dsh-memoir/settings")), fetchCalls.map((c) => c.url));
+check("同时也去拉 /models（列宿主已注册的模型）", fetchCalls.some((c) => String(c.url).endsWith("/api/dsh-memoir/models")), fetchCalls.map((c) => c.url));
 check("设置视图有写入总开关", settingsText.includes("T:enabled"), settingsText.slice(0, 240));
 check("设置视图有模型定制（服务商 + 模型）", settingsText.includes("T:provider") && settingsText.includes("T:model"), settingsText.slice(0, 240));
 check("设置视图有思考程度", settingsText.includes("T:effort"), settingsText.slice(0, 240));
@@ -497,7 +498,8 @@ const toggle = settingsInputs.filter((n) => n.props.type === "checkbox")[0];
 check("写入开关是勾上的（enabled=true）", toggle?.props.checked === true, toggle?.props);
 
 const selects = findAll(inSettings, (n) => n.type === "select");
-check("三个下拉：思考程度 + 界面语言 + 记忆语言", selects.length === 3, selects.length);
+check("四个下拉：模型目录 + 思考程度 + 界面语言 + 记忆语言", selects.length === 4, selects.length);
+check("设置视图有「从宿主已注册的模型里选」入口", settingsText.includes("T:pickModel") || settingsText.includes("T:noCatalog"), settingsText.slice(0, 320));
 check("设置视图有记忆语言（跟界面语言是两件事）", settingsText.includes("T:memoryLanguage"), settingsText.slice(0, 300));
 const memLangSelect = selects.find((n) => JSON.stringify(n.children ?? "").includes("T:memoryLangAuto"));
 check("记忆语言下拉带「不限制」选项", Boolean(memLangSelect), "没找到记忆语言下拉");

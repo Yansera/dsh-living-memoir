@@ -46,7 +46,7 @@ check(
   seen.tools.map((t) => t.name)
 );
 check("注册了 1 个系统提示 section", seen.sections.length === 1 && seen.sections[0].name === "memoir:index");
-check("注册了 4 条路由", seen.routes.length === 4, seen.routes.map((r) => r.path));
+check("注册了 5 条路由", seen.routes.length === 5, seen.routes.map((r) => r.path));
 check("每条注册都走 ctx.effect", seen.effects === 6, seen.effects);
 check("挂上了会话事件钩子（自动提炼）", seen.events.includes("session/event"), seen.events);
 
@@ -173,6 +173,11 @@ check("新分类出现在 /state 里", Boolean(brandNew), r.body.categories.map(
 check("新分类带上了中文名", brandNew?.title === "新分类", brandNew);
 
 // ── 设置面板：写入总开关 + 模型定制 ────────────────────────────────────────
+// 模型目录：宿主没提供 llm 时也要返回 200 + 空列表，页面才不至于打不开
+r = await getJson(`${API_PREFIX}/models`);
+check("GET /models 返回 200", r.status === 200, r);
+check("没有 llm 服务时返回空 providers（不是报错）", Array.isArray(r.body.providers) && r.body.providers.length === 0, r.body);
+
 r = await getJson(`${API_PREFIX}/settings`, { method: "GET" });
 check("GET /settings 返回 200", r.status === 200, r);
 check("默认是开着的", r.body.effective.enabled !== false, r.body.effective);
