@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 452" width="900" height="452" role="img" aria-label="Memoir: one Markdown file per category, three layers deep, with a dedicated page in the GUI">
+  <style>
+    text { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Noto Sans", sans-serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    .title { font-size: 27px; font-weight: 700; fill: #1f2328; }
+    .sub { font-size: 13px; fill: #656d76; }
+    .cardtitle { font-size: 11px; font-weight: 600; fill: #8c959f; letter-spacing: .08em; }
+    .l1 { font-size: 15px; font-weight: 700; fill: #8250df; }
+    .l2 { font-size: 13.5px; font-weight: 700; fill: #0969da; }
+    .l3 { font-size: 12.5px; fill: #1f2328; }
+    .meta { font-size: 10.5px; fill: #a0a8b0; }
+    .cat { font-size: 12.5px; font-weight: 600; fill: #1f2328; }
+    .catdim { font-size: 12.5px; fill: #57606a; }
+    .cnt { font-size: 11px; fill: #8c959f; }
+    .badgetext { font-size: 11.5px; font-weight: 600; fill: #0969da; }
+    .note { font-size: 11.5px; fill: #656d76; }
+  </style>
+
+  <rect width="900" height="452" fill="#ffffff"/>
+  <text class="title" x="34" y="46">Memoir</text>
+  <text class="sub" x="34" y="68">Cross-session memory, kept as a short Markdown living document — rewritten in place, never appended to.</text>
+
+  <!-- 左：记忆库文件 -->
+  <rect x="34" y="94" width="404" height="322" rx="12" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+  <text class="cardtitle" x="56" y="122">MEMORY DIR · one .md per category</text>
+  <text class="l1 mono" x="56" y="154"># 在做的事</text>
+  <text class="meta mono" x="56" y="174">&lt;!-- 每个项目一节 · 可以直接手工编辑 --&gt;</text>
+  <text class="l2 mono" x="56" y="204">## 记忆册</text>
+  <text class="l3 mono" x="56" y="226">- 把跨会话记忆整理成分类简短的 md 活文档</text>
+  <text class="l3 mono" x="56" y="246">- 按三层组织：分类 / 小节 / 条目，最多三层</text>
+  <text class="l2 mono" x="56" y="278">## 修仙：进化网络</text>
+  <text class="l3 mono" x="56" y="300">- 用基因突变与自然选择长出承载语义的拓扑</text>
+  <text class="meta mono" x="56" y="330">  &lt;!-- memoir id=a1b2c3d4 | imp=4 | at=2026-10-07 --&gt;</text>
+  <text class="note" x="56" y="374">纯文本、无数据库、无缓存 —— 手工改一行，页面刷新就能看到。</text>
+  <text class="note" x="56" y="394">图层：<tspan class="mono" fill="#8250df"># 分类</tspan> ·  <tspan class="mono" fill="#0969da">## 小节</tspan> ·  <tspan class="mono">- 条目</tspan></text>
+
+  <!-- 右：GUI 页面 -->
+  <rect x="462" y="94" width="404" height="322" rx="12" fill="#ffffff" stroke="#d0d7de" stroke-width="1.5"/>
+  <text class="cardtitle" x="484" y="122">GUI PAGE · sidebar entry</text>
+
+  <!-- 侧边栏 -->
+  <rect x="482" y="138" width="126" height="256" rx="8" fill="#f6f8fa" stroke="#e4e8ec" stroke-width="1"/>
+  <rect x="492" y="150" width="106" height="24" rx="6" fill="#ddf4ff" stroke="#54aeff" stroke-width="1"/>
+  <text class="cat" x="502" y="167">全部</text>
+  <text class="cnt" x="576" y="167">38</text>
+  <text class="catdim" x="502" y="196">关于用户</text>
+  <text class="cnt" x="576" y="196">15</text>
+  <text class="catdim" x="502" y="222">偏好与规则</text>
+  <text class="cnt" x="576" y="222">6</text>
+  <text class="catdim" x="502" y="248">正在做的事</text>
+  <text class="cnt" x="578" y="248">16</text>
+  <text class="catdim" x="502" y="274">定下的决策</text>
+  <text class="cnt" x="578" y="274">5</text>
+  <text class="catdim" x="502" y="300">关于助手</text>
+  <text class="cnt" x="578" y="300">2</text>
+  <line x1="492" y1="322" x2="598" y2="322" stroke="#e4e8ec" stroke-width="1"/>
+  <text class="catdim" x="502" y="344">⚙ 设置</text>
+  <text class="cnt" x="502" y="368">写入开关 · 模型 · 语言</text>
+
+  <!-- 主区条目 -->
+  <rect x="624" y="138" width="222" height="58" rx="8" fill="#ffffff" stroke="#d8dee4" stroke-width="1"/>
+  <text class="l2 mono" x="638" y="160" font-size="11.5">记忆册</text>
+  <text class="l3" x="638" y="180" font-size="11.5">把跨会话记忆整理成分类简短的 md 活文档</text>
+
+  <rect x="624" y="206" width="222" height="58" rx="8" fill="#ffffff" stroke="#d8dee4" stroke-width="1"/>
+  <text class="l2 mono" x="638" y="228" font-size="11.5">记忆册</text>
+  <text class="l3" x="638" y="248" font-size="11.5">只承担长期宏观那一层</text>
+
+  <rect x="624" y="274" width="222" height="58" rx="8" fill="#ffffff" stroke="#d8dee4" stroke-width="1"/>
+  <text class="l2 mono" x="638" y="296" font-size="11.5">修仙：进化网络</text>
+  <text class="l3" x="638" y="316" font-size="11.5">拓扑承载语义，网络要能自己长出来</text>
+
+  <rect x="624" y="346" width="118" height="26" rx="13" fill="#ddf4ff" stroke="#54aeff" stroke-width="1"/>
+  <text class="badgetext" x="640" y="363">← 返回对话</text>
+  <text class="cnt" x="752" y="363">⚙ 设置</text>
+</svg>
