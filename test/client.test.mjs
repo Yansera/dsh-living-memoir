@@ -297,6 +297,8 @@ check("全部视图给每条标出分类名", tagCount === 2, tagCount);
 check("全部视图不显示新增表单", !byText(hydrated, "button", "T:add"), "不该有新增按钮");
 check("全部视图给出引导文案", hydratedText.includes("T:allHint"), hydratedText.slice(0, 200));
 
+
+
 // 切到「关于主人」，后面所有写操作都在这个分类里做
 const byLabel = (tree, label) =>
   findAll(tree, (n) => n.type === "button" && textOf({ type: "x", props: {}, children: n.children }).includes(label))[0];
@@ -445,6 +447,77 @@ const backBtn = byText(wired, "button", "T:back");
 check("找得到「返回对话」按钮", Boolean(backBtn), textOf(wired).slice(0, 160));
 backBtn.props.onClick();
 check("点它会调 ctx.layout.selectPanel(null) 回对话", layoutCalls.length === 1 && layoutCalls[0] === null, layoutCalls);
+
+// ── 设置面板 ──────────────────────────────────────────────────────────────
+// 放最后：它会改共享的 hook 状态，必须跑在其它面板测试之后。
+hookStates = [];
+fetchCalls.length = 0;
+// 前面的失败重试测试替换过 globalThis.fetch，这里装回基于 fetchResponder 的那版；
+// 不装回来的话请求会走别的 mock，设置拉不到，回填断言就会看到空串。
+globalThis.fetch = async (url, options) => {
+  fetchCalls.push({ url, method: (options && options.method) || "GET", body: options && options.body });
+  const body = fetchResponder(url, options);
+  if (body instanceof Error) throw body;
+  return { ok: true, status: 200, json: async () => body };
+};
+fetchResponder = (url) => {
+  if (String(url).includes("/settings")) {
+    return { settings: { enabled: true, distillProvider: "local-llama", distillModel: "qwen3-8b" }, effective: {} };
+  }
+  return { dir: "D:\\dsh\\memoir", categories: categoryFixture() };
+};
+
+render(Panel, { t, onClose: () => {} });
+await settle();
+const gear = byTitle(render(Panel, { t, onClose: () => {} }), "T:settings");
+check("顶栏有设置入口（⚙）", Boolean(gear), "没找到 title=T:settings 的按钮");
+check("设置入口默认不是选中态", !String(gear?.props?.className ?? "").includes("__mm_iconBtnOn"), gear?.props?.className);
+
+gear.props.onClick();
+// apiFetch 是 fetch → json() → then() 三级 promise，一个 tick 不够
+await settle();
+await settle();
+await settle();
+const inSettings = render(Panel, { t, onClose: () => {} });
+const settingsText = textOf(inSettings);
+check("点开后去拉 /settings", fetchCalls.some((c) => String(c.url).endsWith("/api/dsh-memoir/settings")), fetchCalls.map((c) => c.url));
+check("设置视图有写入总开关", settingsText.includes("T:enabled"), settingsText.slice(0, 240));
+check("设置视图有模型定制（服务商 + 模型）", settingsText.includes("T:provider") && settingsText.includes("T:model"), settingsText.slice(0, 240));
+check("设置视图有思考程度", settingsText.includes("T:effort"), settingsText.slice(0, 240));
+check("设置视图有界面语言", settingsText.includes("T:language"), settingsText.slice(0, 240));
+check("设置入口切到选中态", String(byTitle(inSettings, "T:settings")?.props?.className ?? "").includes("__mm_iconBtnOn"));
+
+const settingsInputs = findAll(inSettings, (n) => n.type === "input");
+check(
+  "已存的服务商与模型回填进输入框",
+  settingsInputs.some((n) => n.props.defaultValue === "local-llama") && settingsInputs.some((n) => n.props.defaultValue === "qwen3-8b"),
+  settingsInputs.map((n) => n.props.defaultValue)
+);
+const toggle = settingsInputs.filter((n) => n.props.type === "checkbox")[0];
+check("写入开关是勾上的（enabled=true）", toggle?.props.checked === true, toggle?.props);
+
+const selects = findAll(inSettings, (n) => n.type === "select");
+check("两个下拉：思考程度 + 界面语言", selects.length === 2, selects.length);
+// 注意：这个替身把 children 放在 node.children 上，不在 props 上。
+const langSelect = selects.find((n) => ["zh", "en", "fr", "de", "ja"].every((code) => JSON.stringify(n.children ?? "").includes(`"${code}"`)));
+check("语言下拉给出五种语言", Boolean(langSelect), "没找到含五种语言的下拉");
+const effortSelect = selects.find((n) => JSON.stringify(n.children ?? "").includes('"off"'));
+check("思考程度下拉给出 off/low/high/max/none", effortSelect && ["off", "low", "high", "max", "none"].every((v) => JSON.stringify(effortSelect.children ?? "").includes(`"${v}"`)), "选项不全");
+
+fetchCalls.length = 0;
+toggle.props.onChange({ target: { checked: false } });
+await settle();
+const patch = fetchCalls.find((c) => c.method === "PATCH");
+check("关掉开关会发 PATCH /settings", Boolean(patch) && String(patch.url).endsWith("/settings"), fetchCalls.map((c) => `${c.method} ${c.url}`));
+check("PATCH 带上 enabled=false", patch && JSON.parse(patch.body).enabled === false, patch?.body);
+
+fetchCalls.length = 0;
+langSelect.props.onChange({ target: { value: "fr" } });
+await settle();
+const langPatch = fetchCalls.find((c) => c.method === "PATCH");
+check("切语言会发 PATCH 并带上 locale", langPatch && JSON.parse(langPatch.body).locale === "fr", langPatch?.body);
+
+fetchResponder = () => ({ dir: "D:\\dsh\\memoir", categories: categoryFixture() });
 
 console.log(failures === 0 ? "\n全部通过" : `\n${failures} 项失败`);
 process.exit(failures === 0 ? 0 : 1);
