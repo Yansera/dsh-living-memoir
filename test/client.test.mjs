@@ -497,7 +497,10 @@ const toggle = settingsInputs.filter((n) => n.props.type === "checkbox")[0];
 check("写入开关是勾上的（enabled=true）", toggle?.props.checked === true, toggle?.props);
 
 const selects = findAll(inSettings, (n) => n.type === "select");
-check("两个下拉：思考程度 + 界面语言", selects.length === 2, selects.length);
+check("三个下拉：思考程度 + 界面语言 + 记忆语言", selects.length === 3, selects.length);
+check("设置视图有记忆语言（跟界面语言是两件事）", settingsText.includes("T:memoryLanguage"), settingsText.slice(0, 300));
+const memLangSelect = selects.find((n) => JSON.stringify(n.children ?? "").includes("T:memoryLangAuto"));
+check("记忆语言下拉带「不限制」选项", Boolean(memLangSelect), "没找到记忆语言下拉");
 // 注意：这个替身把 children 放在 node.children 上，不在 props 上。
 const langSelect = selects.find((n) => ["zh", "en", "fr", "de", "ja"].every((code) => JSON.stringify(n.children ?? "").includes(`"${code}"`)));
 check("语言下拉给出五种语言", Boolean(langSelect), "没找到含五种语言的下拉");
@@ -516,6 +519,11 @@ langSelect.props.onChange({ target: { value: "fr" } });
 await settle();
 const langPatch = fetchCalls.find((c) => c.method === "PATCH");
 check("切语言会发 PATCH 并带上 locale", langPatch && JSON.parse(langPatch.body).locale === "fr", langPatch?.body);
+fetchCalls.length = 0;
+memLangSelect.props.onChange({ target: { value: "en" } });
+await settle();
+const memPatch = fetchCalls.find((c) => c.method === "PATCH");
+check("切记忆语言会发 PATCH 并带上 memoryLanguage", memPatch && JSON.parse(memPatch.body).memoryLanguage === "en", memPatch?.body);
 
 fetchResponder = () => ({ dir: "D:\\dsh\\memoir", categories: categoryFixture() });
 

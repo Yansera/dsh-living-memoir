@@ -144,6 +144,21 @@ check("配了 model 就用配的", lastOptions?.model === "qwen3-8b", lastOption
 config.distillProvider = "";
 config.distillModel = "";
 
+// 记忆语言：设了就要求内容一律用它写（分类名、小节名也算内容）
+llmCalls = 0;
+handlers["session/event"](makeSession("s1c", makeEvents(12)), { type: "turn/end" });
+await wait(80);
+const noLangPrompt = JSON.stringify(lastOptions?.messages ?? []);
+check("没设记忆语言时不下语言命令（让模型跟着对话走）", !noLangPrompt.includes("【语言】"), noLangPrompt.slice(-200));
+
+config.memoryLanguage = "en";
+llmCalls = 0;
+handlers["session/event"](makeSession("s1d", makeEvents(12)), { type: "turn/end" });
+await wait(80);
+const langPrompt = JSON.stringify(lastOptions?.messages ?? []);
+check("设了记忆语言就在提示词里下语言命令", langPrompt.includes("【语言】") && langPrompt.includes("英语"), langPrompt.slice(-240));
+config.memoryLanguage = "";
+
 // 游标：同一段不该被重复消费
 llmCalls = 0;
 handlers["session/event"](session, { type: "turn/end" });

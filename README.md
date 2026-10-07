@@ -4,13 +4,13 @@
 
 [![npm](https://img.shields.io/npm/v/@yansera/dsh-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-memoir)
 [![CI](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml/badge.svg)](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-238%20passing-2da44e)](test/)
+[![tests](https://img.shields.io/badge/tests-243%20passing-2da44e)](test/)
 [![license](https://img.shields.io/badge/license-MIT-8250df)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20.18-339933)](package.json)
 
 > **把跨会话记忆整理成分门别类、简短可读的 Markdown 活文档**，并在 DeepSeek Harness 的界面里给一个专属页面。
 
-![记忆册：一个分类一个 md 文件，三层组织，配一个专属页面](docs/assets/hero.svg)
+![记忆册：一个分类一个 md 文件，三层组织，配一个专属页面](docs/assets/hero.zh.svg)
 
 ---
 
@@ -107,7 +107,7 @@ dsh plugin --profile desktop add 'file:D:\path\to\dsh-memoir'
 
 ## ✍️ 三条写入通道，一本活文档
 
-![三条写入通道汇入一本活文档；容量超限时触发强制整理](docs/assets/pipeline.svg)
+![三条写入通道汇入一本活文档；容量超限时触发强制整理](docs/assets/pipeline.zh.svg)
 
 | 通道 | 怎么触发 | 谁在写 |
 |---|---|---|
@@ -221,6 +221,7 @@ dsh plugin --profile desktop add 'file:D:\path\to\dsh-memoir'
     distillMaxItems: 60        # 整本条目上限（提示模型控制规模）
     distillMaxTokens: 8000     # 输出预算下限（会按记忆规模自动往上抬）
     distillReasoningEffort: off # 改写不需要推理，关掉思考把预算全留给正文
+    memoryLanguage: ''       # 记忆内容用哪种语言写；留空=不限制
     pageEntryLimit: 12         # 单个分类超过这么多条 → 触发强制整理
     bookEntryLimit: 40         # 整本超过这么多条 → 触发强制整理
 ```
@@ -283,7 +284,7 @@ $DSH_HOME/memoir/          ← 默认位置，可用 memoryDir 改
 ## 🛠 开发
 
 ```sh
-npm test                # 全部 238 项离线自测
+npm test                # 全部 243 项离线自测
 npm run test:store      # 存储层：解析、去重、移动、搜索、截断、注入文本
 npm run test:plugin     # host 端：注册面、工具执行、系统提示、HTTP 路由
 npm run test:client     # 页面半：用 React 替身渲染真 bundle，模拟点击并断言请求

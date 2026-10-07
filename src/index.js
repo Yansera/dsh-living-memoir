@@ -155,6 +155,13 @@ const Config = z.object({
    * 所以默认 "off" 彻底关掉思考；"low"/"high"/"max" 可恢复，"none" = 不发送该字段。
    */
   distillReasoningEffort: z.string().default("off"),
+  /**
+   * 记忆内容用哪种语言写（zh / en / fr / de / ja）。留空 = 不限制，
+   * 模型多半跟着对话语言走。
+   *
+   * 跟界面语言是两回事：界面语言只换按钮文案，这个决定**存进 md 里的字**。
+   */
+  memoryLanguage: z.string().default(""),
 });
 
 /** 一条记忆的最大字符数——「简短可读」是这套东西的立身之本。 */
@@ -875,6 +882,7 @@ function apply(ctx, config) {
             distillProvider: String(resolveConfig().distillProvider ?? ""),
             distillModel: String(resolveConfig().distillModel ?? ""),
             distillReasoningEffort: String(resolveConfig().distillReasoningEffort ?? ""),
+            memoryLanguage: String(resolveConfig().memoryLanguage ?? ""),
           },
           categories: store.readAll(),
         });

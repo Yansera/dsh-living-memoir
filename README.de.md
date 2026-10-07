@@ -4,13 +4,13 @@
 
 [![npm](https://img.shields.io/npm/v/@yansera/dsh-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-memoir)
 [![CI](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml/badge.svg)](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-238%20passing-2da44e)](test/)
+[![tests](https://img.shields.io/badge/tests-243%20passing-2da44e)](test/)
 [![license](https://img.shields.io/badge/license-MIT-8250df)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20.18-339933)](package.json)
 
 > **Sitzungsübergreifendes Gedächtnis für DeepSeek Harness — geführt als kurzes, lesbares Markdown-Lebenddokument**, mit eigener Seite in der Oberfläche.
 
-![Memoir: eine Markdown-Datei je Kategorie, drei Ebenen, plus eine eigene Seite](docs/assets/hero.svg)
+![Memoir: eine Markdown-Datei je Kategorie, drei Ebenen, plus eine eigene Seite](docs/assets/hero.en.svg)
 
 ---
 
@@ -107,7 +107,7 @@ Beim ersten Start werden fünf Kategorien angelegt: **Zum Nutzer · Vorlieben un
 
 ## ✍️ Drei Schreibwege, ein Lebenddokument
 
-![Drei Schreibwege speisen ein Lebenddokument; ein Kapazitätsschwellwert erzwingt ein Aufräumen](docs/assets/pipeline.svg)
+![Drei Schreibwege speisen ein Lebenddokument; ein Kapazitätsschwellwert erzwingt ein Aufräumen](docs/assets/pipeline.en.svg)
 
 | Weg | Ausgelöst durch | Wer schreibt |
 |---|---|---|
@@ -221,6 +221,7 @@ Alles, was je nach Einsatz variiert, steht in `cordis.patch.yml` (oder einer Üb
     distillMaxItems: 60        # Obergrenze an Einträgen, dem Modell vorgeschlagen
     distillMaxTokens: 8000     # Untergrenze des Ausgabebudgets (wächst mit dem Heft)
     distillReasoningEffort: off # Umschreiben braucht kein Nachdenken
+    memoryLanguage: ''       # language used for the saved text; empty = unrestricted
     pageEntryLimit: 12         # darüber in einer Kategorie → Zwangs-Aufräumen
     bookEntryLimit: 40         # darüber im Heft → Zwangs-Aufräumen
 ```
@@ -283,7 +284,7 @@ Nein. Abgesehen von der `llm`-Fähigkeit des Hosts zum Umschreiben stellt es kei
 ## 🛠 Entwicklung
 
 ```sh
-npm test                # alle 238 Offline-Tests
+npm test                # alle 243 Offline-Tests
 npm run test:store      # Speicher: Analyse, Dedupe, Verschieben, Suche, Kürzung
 npm run test:plugin     # Host-Hälfte: Registrierungen, Werkzeuge, Prompt, HTTP-Routen
 npm run test:client     # Browser-Hälfte: rendert das echte Bundle mit React-Ersatz

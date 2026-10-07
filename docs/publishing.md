@@ -7,7 +7,7 @@
 - 有 npm 账号，且**用户名是 `yansera`**——scoped 包的命名空间就是用户名。用别的名字也能发，但要把包名和 `cordis.patch.yml` 里的挂载名一起改成 `@<用户名>/dsh-memoir`
 - 已 `npm login`
 - 工作区干净：`git status` 没有未提交改动
-- 全量自测通过：`npm test`（238 项）
+- 全量自测通过：`npm test`（243 项）
 
 ## 发一版
 

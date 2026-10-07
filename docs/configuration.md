@@ -15,6 +15,7 @@
     distillMaxItems: 60
     distillMaxTokens: 8000
     distillReasoningEffort: off
+    memoryLanguage: ''       # 记忆内容用哪种语言写；留空=不限制
     pageEntryLimit: 12
     bookEntryLimit: 40
 ```

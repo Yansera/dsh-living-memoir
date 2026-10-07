@@ -4,13 +4,13 @@
 
 [![npm](https://img.shields.io/npm/v/@yansera/dsh-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-memoir)
 [![CI](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml/badge.svg)](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-238%20passing-2da44e)](test/)
+[![tests](https://img.shields.io/badge/tests-243%20passing-2da44e)](test/)
 [![license](https://img.shields.io/badge/license-MIT-8250df)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20.18-339933)](package.json)
 
 > **Cross-session memory for DeepSeek Harness, kept as a short, readable Markdown living document** — with a page of its own in the GUI.
 
-![Memoir: one Markdown file per category, three layers deep, plus a dedicated page](docs/assets/hero.svg)
+![Memoir: one Markdown file per category, three layers deep, plus a dedicated page](docs/assets/hero.en.svg)
 
 ---
 
@@ -107,7 +107,7 @@ Five categories are seeded on first run: **About the user · Preferences & rules
 
 ## ✍️ Three write paths, one living document
 
-![Three write paths feed one living document; a capacity trigger forces a tidy-up](docs/assets/pipeline.svg)
+![Three write paths feed one living document; a capacity trigger forces a tidy-up](docs/assets/pipeline.en.svg)
 
 | Path | Triggered by | Who writes |
 |---|---|---|
@@ -221,6 +221,7 @@ Every deployment-varying knob lives in `cordis.patch.yml` (or an overlay in your
     distillMaxItems: 60        # book-wide entry ceiling, suggested to the model
     distillMaxTokens: 8000     # output budget floor (scales up with book size)
     distillReasoningEffort: off # rewriting needs no reasoning; save the budget for text
+    memoryLanguage: ''       # language used for the saved text; empty = unrestricted
     pageEntryLimit: 12         # more than this in one category → forced tidy-up
     bookEntryLimit: 40         # more than this in the book → forced tidy-up
 ```
@@ -283,7 +284,7 @@ No. Apart from the host's `llm` capability for rewriting, it makes no requests o
 ## 🛠 Development
 
 ```sh
-npm test                # all 238 offline tests
+npm test                # all 243 offline tests
 npm run test:store      # storage: parsing, dedupe, moves, search, truncation, inject text
 npm run test:plugin     # host half: registrations, tool calls, system prompt, HTTP routes
 npm run test:client     # browser half: renders the real bundle with a React stand-in

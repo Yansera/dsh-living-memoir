@@ -28,6 +28,15 @@ async function loadLlmModule() {
 /** 单次喂给模型的对话文本上限。 */
 const MAX_TRANSCRIPT = 8000;
 
+/** 记忆语言的显示名；设了 memoryLanguage 就要求内容一律用它写。 */
+const MEMORY_LANGUAGE_NAMES = {
+  zh: "简体中文",
+  en: "英语",
+  fr: "法语",
+  de: "德语",
+  ja: "日语",
+};
+
 const PROMPT_HEAD = `你是「记忆册」的编辑。下面给你两样东西：记忆册现在的**全部内容**，以及用户和助手刚刚发生的一段对话。
 
 你的任务不是往后追加，而是**改写整本记忆册**——像编辑维护一份活文档那样通读一遍，交出改好的完整版本：
@@ -282,6 +291,13 @@ export function createDistiller({ ctx, store, resolveConfig }) {
     // 改写要吐出整本记忆册：预算得跟着记忆规模走，否则记忆一多就注定说不完。
     const configuredTokens = Number(config.distillMaxTokens) || 8000;
     const outputBudget = Math.max(configuredTokens, Math.ceil(existing.length * 1.2) + 2000);
+    // 记忆语言：设了就要求内容一律用它写（分类名、小节名也算内容）。
+    // 留空时不下这条命令，让模型跟着对话语言走。
+    const wantLang = String(config.memoryLanguage ?? "").trim();
+    const langName = MEMORY_LANGUAGE_NAMES[wantLang];
+    const langLine = langName
+      ? `【语言】这份记忆册的内容一律用${langName}写，分类名和小节名也是，不要混用其他语言。`
+      : "";
     const prompt = [
       PROMPT_HEAD,
       "",
@@ -293,6 +309,7 @@ export function createDistiller({ ctx, store, resolveConfig }) {
       "--- 对话结束 ---",
       "",
       `改写后的整本记忆册，条目总数控制在 ${maxItems} 条以内。`,
+      langLine,
       tidyOrder,
     ].join("\n");
 

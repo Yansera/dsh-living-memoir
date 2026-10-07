@@ -121,6 +121,9 @@ window.__ModuleLoader__.load({
       language: "界面语言",
       langAuto: "跟随宿主",
       saved: "已保存",
+      memoryLanguage: "记忆语言",
+      memoryLanguageHint: "存进 md 里的字用哪种语言写；跟界面语言是两件事。",
+      memoryLangAuto: "不限制（跟随对话）",
     };
     var en = {
       nav: "Memoir",
@@ -159,6 +162,9 @@ window.__ModuleLoader__.load({
       language: "Language",
       langAuto: "Follow host",
       saved: "Saved",
+      memoryLanguage: "Memory language",
+      memoryLanguageHint: "Which language the saved text uses — separate from the interface language.",
+      memoryLangAuto: "Unrestricted (follow the conversation)",
     };
     var fr = {
       nav: "Mémoire",
@@ -197,6 +203,9 @@ window.__ModuleLoader__.load({
       language: "Langue",
       langAuto: "Suivre l'hôte",
       saved: "Enregistré",
+      memoryLanguage: "Langue des souvenirs",
+      memoryLanguageHint: "Langue du texte enregistré — distincte de la langue de l'interface.",
+      memoryLangAuto: "Sans restriction (suivre la conversation)",
     };
     var de = {
       nav: "Memoir",
@@ -235,6 +244,9 @@ window.__ModuleLoader__.load({
       language: "Sprache",
       langAuto: "Dem Host folgen",
       saved: "Gespeichert",
+      memoryLanguage: "Sprache der Einträge",
+      memoryLanguageHint: "Sprache des gespeicherten Texts — unabhängig von der Oberflächensprache.",
+      memoryLangAuto: "Uneingeschränkt (dem Gespräch folgen)",
     };
     var ja = {
       nav: "記憶帳",
@@ -273,6 +285,9 @@ window.__ModuleLoader__.load({
       language: "表示言語",
       langAuto: "ホストに従う",
       saved: "保存しました",
+      memoryLanguage: "記憶の言語",
+      memoryLanguageHint: "保存される本文の言語。表示言語とは別です。",
+      memoryLangAuto: "制限なし（会話に合わせる）",
     };
     var DICTS = { zh: zh, en: en, fr: fr, de: de, ja: ja };
 
@@ -827,6 +842,29 @@ window.__ModuleLoader__.load({
             h("option", { value: "de" }, "Deutsch"),
             h("option", { value: "ja" }, "日本語")
           )
+        ),
+        h(
+          "div",
+          { className: "__mm_field" },
+          h("span", { className: "__mm_label" }, t("memoryLanguage")),
+          h(
+            "select",
+            {
+              className: "__mm_select",
+              value: (settings || {}).memoryLanguage || "",
+              disabled: saving,
+              onChange: function (e) {
+                saveSettings({ memoryLanguage: e.target.value });
+              },
+            },
+            h("option", { value: "" }, t("memoryLangAuto")),
+            h("option", { value: "zh" }, "简体中文"),
+            h("option", { value: "en" }, "English"),
+            h("option", { value: "fr" }, "Français"),
+            h("option", { value: "de" }, "Deutsch"),
+            h("option", { value: "ja" }, "日本語")
+          ),
+          h("span", { className: "__mm_desc" }, t("memoryLanguageHint"))
         ),
         h("span", { className: "__mm_desc" }, t("settingsHint"))
       );

@@ -4,13 +4,13 @@
 
 [![npm](https://img.shields.io/npm/v/@yansera/dsh-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-memoir)
 [![CI](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml/badge.svg)](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-238%20passing-2da44e)](test/)
+[![tests](https://img.shields.io/badge/tests-243%20passing-2da44e)](test/)
 [![license](https://img.shields.io/badge/license-MIT-8250df)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20.18-339933)](package.json)
 
 > **La mémoire inter-sessions pour DeepSeek Harness, tenue comme un document Markdown vivant, court et lisible** — avec sa propre page dans l'interface.
 
-![Memoir : un fichier Markdown par catégorie, trois niveaux, plus une page dédiée](docs/assets/hero.svg)
+![Memoir : un fichier Markdown par catégorie, trois niveaux, plus une page dédiée](docs/assets/hero.en.svg)
 
 ---
 
@@ -107,7 +107,7 @@ Cinq catégories sont créées au premier lancement : **À propos de l'utilisate
 
 ## ✍️ Trois chemins d'écriture, un document vivant
 
-![Trois chemins d'écriture alimentent un document vivant ; un seuil de capacité déclenche un rangement](docs/assets/pipeline.svg)
+![Trois chemins d'écriture alimentent un document vivant ; un seuil de capacité déclenche un rangement](docs/assets/pipeline.en.svg)
 
 | Chemin | Déclenché par | Qui écrit |
 |---|---|---|
@@ -221,6 +221,7 @@ Tout ce qui varie selon le déploiement vit dans `cordis.patch.yml` (ou une surc
     distillMaxItems: 60        # plafond d'entrées du carnet, suggéré au modèle
     distillMaxTokens: 8000     # plancher du budget de sortie (monte avec la taille)
     distillReasoningEffort: off # réécrire ne demande pas de raisonnement
+    memoryLanguage: ''       # language used for the saved text; empty = unrestricted
     pageEntryLimit: 12         # au-delà dans une catégorie → rangement forcé
     bookEntryLimit: 40         # au-delà dans le carnet → rangement forcé
 ```
@@ -283,7 +284,7 @@ Non. Hormis la capacité `llm` de l'hôte pour la réécriture, il n'émet aucun
 ## 🛠 Développement
 
 ```sh
-npm test                # les 238 tests hors ligne
+npm test                # les 243 tests hors ligne
 npm run test:store      # stockage : analyse, déduplication, déplacements, recherche
 npm run test:plugin     # moitié hôte : enregistrements, outils, prompt, routes HTTP
 npm run test:client     # moitié navigateur : rend le vrai bundle avec un substitut React
