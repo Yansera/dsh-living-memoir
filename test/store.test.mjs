@@ -23,7 +23,7 @@ console.log(`临时记忆库：${dir}`);
 const store = createStore(dir);
 
 // 1. 空库
-check("空库读出 6 个分类", store.readAll().length === 6);
+check("空库读出 5 个分类", store.readAll().length === 5);
 check("空库无注入内容", renderIndex(store, 12) === "");
 
 // 2. 新增

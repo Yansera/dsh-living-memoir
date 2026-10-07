@@ -36,12 +36,11 @@ const API_PREFIX = "/api/dsh-memoir";
  * 之后分类就由模型自己增删维护了：目录里有哪些 md，就有哪些分类。
  */
 const DEFAULT_CATEGORIES = [
-  { id: "user", title: "关于主人", hint: "身份、环境、习惯、称呼" },
-  { id: "preferences", title: "偏好与规则", hint: "希望我怎么做、不许怎么做" },
+  { id: "user", title: "关于用户", hint: "身份、环境、习惯、称呼" },
+  { id: "preferences", title: "偏好与规则", hint: "希望助手怎么做、不许怎么做" },
   { id: "projects", title: "正在做的事", hint: "项目、当前进展、下一步" },
   { id: "decisions", title: "定下的决策", hint: "选了哪条路、为什么" },
-  { id: "lessons", title: "踩过的坑", hint: "症状 → 原因 → 解法" },
-  { id: "self", title: "关于我自己", hint: "我的定位、自称、风格" },
+  { id: "self", title: "关于助手", hint: "助手怎么自我介绍、用什么风格配合" },
 ];
 
 /** 分类 id 的形状：它同时是文件名，所以只允许小写字母、数字和连字符。 */
@@ -620,7 +619,7 @@ function renderIndex(store, limit) {
     lines.push(`- ${oneLine}`);
   }
   lines.push("");
-  lines.push("新学到的持久信息（主人的偏好、定下的决策、踩过的坑）用 memoir_note 记进去；记错了用 memoir_forget 删。");
+  lines.push("新学到的持久信息（用户的偏好、定下的决策、踩过的坑）用 memoir_note 记进去；记错了用 memoir_forget 删。");
   return lines.join("\n");
 }
 
@@ -717,7 +716,7 @@ function apply(ctx, config) {
   const noteTool = defineTool({
     name: "memoir_note",
     description:
-      "把一条跨会话记忆写进「记忆册」。当主人说出持久偏好、定下项目决策、纠正我、或我踩到值得记住的坑时调用。" +
+      "把一条跨会话记忆写进「记忆册」。当用户说出持久偏好、定下项目决策、纠正我、或我踩到值得记住的坑时调用。" +
       "一条记忆要短（一句话，别超过 400 字），写成未来会话一看就懂的陈述句。" +
       "同一分类下正文完全相同会被合并，不会重复堆积。",
     parameters: {
@@ -736,7 +735,7 @@ function apply(ctx, config) {
       },
       text: { type: "string", required: true, description: "一句话正文；写成陈述句" },
       importance: { type: "integer", description: "1-5，默认 3；5 表示每次会话都该看到" },
-      source: { type: "string", description: "来源，例如「主人明确说」「观测」「从会话提炼」" },
+      source: { type: "string", description: "来源，例如「用户明确说」「观测」「从会话提炼」" },
     },
     output: {
       schema: {

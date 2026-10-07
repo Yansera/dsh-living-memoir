@@ -37,6 +37,15 @@ window.__ModuleLoader__.load({
       ".__mm_catOn{background:var(--dsw-alias-bg-layer-3);color:var(--dsw-alias-label-primary);font-weight:600}" +
       ".__mm_count{flex:none;font-size:11px;color:var(--dsw-alias-label-tertiary)}" +
       ".__mm_catTag{color:var(--dsw-alias-brand-primary);font-weight:600}" +
+      ".__mm_settings{flex:1;overflow:auto;padding:16px 18px 22px;display:flex;flex-direction:column;gap:16px}" +
+      ".__mm_field{display:flex;flex-direction:column;gap:6px}" +
+      ".__mm_label{font-size:13px;font-weight:600;color:var(--dsw-alias-label-primary)}" +
+      ".__mm_desc{font-size:12px;line-height:1.5;color:var(--dsw-alias-label-tertiary)}" +
+      ".__mm_switch{display:flex;align-items:center;gap:9px;cursor:pointer}" +
+      ".__mm_switch input{width:15px;height:15px;accent-color:var(--dsw-alias-brand-primary);cursor:pointer}" +
+      ".__mm_input,.__mm_select{font:inherit;font-size:13px;padding:7px 10px;border-radius:8px;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-2);color:var(--dsw-alias-label-primary);width:100%;box-sizing:border-box}" +
+      ".__mm_input:focus,.__mm_select:focus{outline:none;border-color:var(--dsw-alias-brand-primary)}" +
+      ".__mm_iconBtnOn{background:var(--dsw-alias-bg-layer-3);color:var(--dsw-alias-brand-primary)}" +
       ".__mm_section{margin:6px 0 -2px;font-size:12px;font-weight:600;color:var(--dsw-alias-label-secondary);letter-spacing:.02em}" +
       ".__mm_page{display:flex;width:100%;height:100%;min-height:0;box-sizing:border-box;background:var(--dsw-alias-bg-layer-1);overflow:hidden}" +
       ".__mm_page .__mm_panel{width:100%;height:100%;max-width:none;border:0;border-radius:0;box-shadow:none;background:transparent}" +
@@ -92,6 +101,24 @@ window.__ModuleLoader__.load({
       empty: "这个分类还是空的。",
       loading: "读取中…",
       newHint: "记忆文件可以直接手工编辑，页面会立刻反映。",
+      settings: "设置",
+      settingsHint: "改完立刻生效，不用重启。",
+      enabled: "记忆写入",
+      enabledHint: "关掉之后既不读取也不写入。",
+      modelSection: "改写用的模型",
+      provider: "服务商",
+      providerHint: "留空 = 跟 Agent 的默认模型走",
+      model: "模型",
+      modelHint: "例如 qwen3-8b、deepseek-flash",
+      effort: "思考程度",
+      effortOff: "关闭",
+      effortLow: "低",
+      effortHigh: "高",
+      effortMax: "最高",
+      effortNone: "不发送",
+      language: "界面语言",
+      langAuto: "跟随宿主",
+      saved: "已保存",
     };
     var en = {
       nav: "Memoir",
@@ -112,7 +139,140 @@ window.__ModuleLoader__.load({
       empty: "Nothing in this category yet.",
       loading: "Loading…",
       newHint: "Memory files are editable by hand; the page reflects them immediately.",
+      settings: "Settings",
+      settingsHint: "Changes apply immediately — no restart needed.",
+      enabled: "Memory writes",
+      enabledHint: "When off, nothing is read or written.",
+      modelSection: "Model for rewriting",
+      provider: "Provider",
+      providerHint: "Empty = follow the agent's default model",
+      model: "Model",
+      modelHint: "e.g. qwen3-8b, deepseek-flash",
+      effort: "Reasoning effort",
+      effortOff: "Off",
+      effortLow: "Low",
+      effortHigh: "High",
+      effortMax: "Max",
+      effortNone: "Don't send",
+      language: "Language",
+      langAuto: "Follow host",
+      saved: "Saved",
     };
+    var fr = {
+      nav: "Mémoire",
+      title: "Mémoire",
+      back: "Retour au chat",
+      all: "Tout",
+      allHint: "Tous les souvenirs, toutes catégories ; choisissez-en une à gauche pour filtrer.",
+      pickCategory: "Choisissez une catégorie à gauche pour ajouter un souvenir.",
+      close: "Fermer",
+      add: "Nouvelle entrée",
+      save: "Enregistrer",
+      cancel: "Annuler",
+      edit: "Modifier",
+      remove: "Supprimer",
+      confirmRemove: "Supprimer ce souvenir ?",
+      placeholder: "Une phrase qu'une session future comprendra…",
+      importance: "Importance",
+      empty: "Cette catégorie est encore vide.",
+      loading: "Chargement…",
+      newHint: "Les fichiers sont modifiables à la main ; la page les reflète aussitôt.",
+      settings: "Réglages",
+      settingsHint: "Les changements prennent effet immédiatement, sans redémarrage.",
+      enabled: "Écriture mémoire",
+      enabledHint: "Désactivé : plus aucune lecture ni écriture.",
+      modelSection: "Modèle de réécriture",
+      provider: "Fournisseur",
+      providerHint: "Vide = suivre le modèle par défaut de l'agent",
+      model: "Modèle",
+      modelHint: "ex. qwen3-8b, deepseek-flash",
+      effort: "Effort de raisonnement",
+      effortOff: "Désactivé",
+      effortLow: "Faible",
+      effortHigh: "Élevé",
+      effortMax: "Maximal",
+      effortNone: "Ne pas envoyer",
+      language: "Langue",
+      langAuto: "Suivre l'hôte",
+      saved: "Enregistré",
+    };
+    var de = {
+      nav: "Memoir",
+      title: "Memoir",
+      back: "Zurück zum Chat",
+      all: "Alle",
+      allHint: "Alle Erinnerungen, alle Kategorien; links eine auswählen zum Filtern.",
+      pickCategory: "Links eine Kategorie wählen, um eine Erinnerung hinzuzufügen.",
+      close: "Schließen",
+      add: "Neuer Eintrag",
+      save: "Speichern",
+      cancel: "Abbrechen",
+      edit: "Bearbeiten",
+      remove: "Löschen",
+      confirmRemove: "Diese Erinnerung löschen?",
+      placeholder: "Ein Satz, den eine künftige Sitzung versteht…",
+      importance: "Wichtigkeit",
+      empty: "Diese Kategorie ist noch leer.",
+      loading: "Lädt…",
+      newHint: "Die Dateien sind von Hand editierbar; die Seite zeigt Änderungen sofort.",
+      settings: "Einstellungen",
+      settingsHint: "Änderungen wirken sofort, ohne Neustart.",
+      enabled: "Gedächtnis-Schreiben",
+      enabledHint: "Aus: kein Lesen und kein Schreiben mehr.",
+      modelSection: "Modell fürs Umschreiben",
+      provider: "Anbieter",
+      providerHint: "Leer = dem Standardmodell des Agenten folgen",
+      model: "Modell",
+      modelHint: "z. B. qwen3-8b, deepseek-flash",
+      effort: "Denkaufwand",
+      effortOff: "Aus",
+      effortLow: "Niedrig",
+      effortHigh: "Hoch",
+      effortMax: "Maximal",
+      effortNone: "Nicht senden",
+      language: "Sprache",
+      langAuto: "Dem Host folgen",
+      saved: "Gespeichert",
+    };
+    var ja = {
+      nav: "記憶帳",
+      title: "記憶帳",
+      back: "会話に戻る",
+      all: "すべて",
+      allHint: "全カテゴリの記憶です。左でカテゴリを選ぶと絞り込めます。",
+      pickCategory: "左でカテゴリを選んでから記録してください。",
+      close: "閉じる",
+      add: "記録する",
+      save: "保存",
+      cancel: "キャンセル",
+      edit: "編集",
+      remove: "削除",
+      confirmRemove: "この記憶を削除しますか？",
+      placeholder: "未来のセッションが読んで分かる一文を…",
+      importance: "重要度",
+      empty: "このカテゴリはまだ空です。",
+      loading: "読み込み中…",
+      newHint: "記憶ファイルは直接編集できます。ページにすぐ反映されます。",
+      settings: "設定",
+      settingsHint: "設定はすぐ反映されます（再起動は不要）。",
+      enabled: "記憶の書き込み",
+      enabledHint: "オフにすると読み書きを一切しません。",
+      modelSection: "書き換えに使うモデル",
+      provider: "プロバイダ",
+      providerHint: "空欄 = エージェント既定のモデルに従う",
+      model: "モデル",
+      modelHint: "例: qwen3-8b, deepseek-flash",
+      effort: "思考の度合い",
+      effortOff: "オフ",
+      effortLow: "低",
+      effortHigh: "高",
+      effortMax: "最大",
+      effortNone: "送信しない",
+      language: "表示言語",
+      langAuto: "ホストに従う",
+      saved: "保存しました",
+    };
+    var DICTS = { zh: zh, en: en, fr: fr, de: de, ja: ja };
 
     var inject = ["slots", "locale", "layout"];
     var API = "/api/dsh-memoir";
@@ -167,6 +327,56 @@ window.__ModuleLoader__.load({
       var busyState = react.useState(false);
       var busy = busyState[0];
       var setBusy = busyState[1];
+
+      // ── 设置面板 ────────────────────────────────────────────────────────
+      var viewState = react.useState("list"); // "list" | "settings"
+      var view = viewState[0];
+      var setView = viewState[1];
+      var settingsState = react.useState(null);
+      var settings = settingsState[0];
+      var setSettings = settingsState[1];
+      var savingState = react.useState(false);
+      var saving = savingState[0];
+      var setSaving = savingState[1];
+
+      /**
+       * 插件里选的语言优先于宿主语言。
+       * 字典就在这个 bundle 里（DICTS），所以切换是纯前端的事，不用回服务端。
+       */
+      var tBase = props.t;
+      var t = function (key) {
+        var want = (settings || {}).locale;
+        if (want && DICTS[want] && DICTS[want][key] !== undefined) return DICTS[want][key];
+        return tBase(key);
+      };
+
+      var loadSettings = react.useCallback(function () {
+        apiFetch(API + "/settings")
+          .then(function (body) {
+            setSettings(body.settings || {});
+          })
+          .catch(function () {
+            // 读不到设置不该让页面打不开——当没设置过。
+            setSettings({});
+          });
+      }, []);
+
+      var saveSettings = function (patch) {
+        setSaving(true);
+        apiFetch(API + "/settings", {
+          method: "PATCH",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(patch),
+        })
+          .then(function (body) {
+            setSettings(body.settings || {});
+            setSaving(false);
+            load(); // 总开关可能刚被关掉，列表要跟着刷新
+          })
+          .catch(function () {
+            setSaving(false);
+          });
+      };
 
       var load = react.useCallback(function () {
         apiFetch(API + "/state")
@@ -515,6 +725,110 @@ window.__ModuleLoader__.load({
         )
       );
 
+      // 设置面板：写入总开关、改写用的模型与思考程度、界面语言。
+      var settingsView = h(
+        "div",
+        { className: "__mm_settings" },
+        h(
+          "div",
+          { className: "__mm_field" },
+          h(
+            "label",
+            { className: "__mm_switch" },
+            h("input", {
+              type: "checkbox",
+              checked: (settings || {}).enabled !== false,
+              disabled: saving,
+              onChange: function (e) {
+                saveSettings({ enabled: e.target.checked });
+              },
+            }),
+            h("span", { className: "__mm_label" }, t("enabled"))
+          ),
+          h("span", { className: "__mm_desc" }, t("enabledHint"))
+        ),
+        h("div", { className: "__mm_field" }, h("span", { className: "__mm_label" }, t("modelSection"))),
+        h(
+          "div",
+          { className: "__mm_field" },
+          h("span", { className: "__mm_desc" }, t("provider") + " — " + t("providerHint")),
+          h("input", {
+            className: "__mm_input",
+            type: "text",
+            defaultValue: (settings || {}).distillProvider || "",
+            placeholder: "deepseek-official / ollama / openai-compatible…",
+            onBlur: function (e) {
+              saveSettings({ distillProvider: e.target.value.trim() });
+            },
+            onKeyDown: function (e) {
+              if (e.key === "Enter") e.target.blur();
+            },
+          })
+        ),
+        h(
+          "div",
+          { className: "__mm_field" },
+          h("span", { className: "__mm_desc" }, t("model") + " — " + t("modelHint")),
+          h("input", {
+            className: "__mm_input",
+            type: "text",
+            defaultValue: (settings || {}).distillModel || "",
+            placeholder: "qwen3-8b",
+            onBlur: function (e) {
+              saveSettings({ distillModel: e.target.value.trim() });
+            },
+            onKeyDown: function (e) {
+              if (e.key === "Enter") e.target.blur();
+            },
+          })
+        ),
+        h(
+          "div",
+          { className: "__mm_field" },
+          h("span", { className: "__mm_label" }, t("effort")),
+          h(
+            "select",
+            {
+              className: "__mm_select",
+              value: (settings || {}).distillReasoningEffort || "",
+              disabled: saving,
+              onChange: function (e) {
+                saveSettings({ distillReasoningEffort: e.target.value });
+              },
+            },
+            h("option", { value: "" }, t("langAuto")),
+            h("option", { value: "off" }, t("effortOff")),
+            h("option", { value: "low" }, t("effortLow")),
+            h("option", { value: "high" }, t("effortHigh")),
+            h("option", { value: "max" }, t("effortMax")),
+            h("option", { value: "none" }, t("effortNone"))
+          )
+        ),
+        h(
+          "div",
+          { className: "__mm_field" },
+          h("span", { className: "__mm_label" }, t("language")),
+          h(
+            "select",
+            {
+              className: "__mm_select",
+              value: (settings || {}).locale || "",
+              disabled: saving,
+              onChange: function (e) {
+                saveSettings({ locale: e.target.value });
+              },
+            },
+            h("option", { value: "" }, t("langAuto")),
+            h("option", { value: "zh" }, "简体中文"),
+            h("option", { value: "en" }, "English"),
+            h("option", { value: "fr" }, "Français"),
+            h("option", { value: "de" }, "Deutsch"),
+            h("option", { value: "ja" }, "日本語")
+          )
+        ),
+        h("span", { className: "__mm_desc" }, t("settingsHint"))
+      );
+
       var shell = h(
         "div",
         { className: "__mm_panel", role: "dialog", "aria-label": t("title") },
@@ -528,6 +842,21 @@ window.__ModuleLoader__.load({
           h("span", { className: "__mm_dir", title: data.dir }, data.dir || ""),
           h("span", { className: "__mm_grow" }),
           data.error ? h("span", { className: "__mm_error" }, data.error) : null,
+          h(
+            "button",
+            {
+              type: "button",
+              className: "__mm_iconBtn" + (view === "settings" ? " __mm_iconBtnOn" : ""),
+              title: t("settings"),
+              "aria-label": t("settings"),
+              onClick: function () {
+                var next = view === "settings" ? "list" : "settings";
+                setView(next);
+                if (next === "settings") loadSettings();
+              },
+            },
+            "⚙"
+          ),
           isPage
             ? null
             : h(
@@ -536,7 +865,7 @@ window.__ModuleLoader__.load({
                 "✕"
               )
         ),
-        body
+        view === "settings" ? settingsView : body
       );
       // 整页模式去掉遮罩：它占的是主区域，不是盖在对话上的一层。
       if (isPage) return h("div", { className: "__mm_page" }, shell);
@@ -591,7 +920,7 @@ window.__ModuleLoader__.load({
     function apply(ctx) {
       var t = ctx.locale.bind(NS);
       ctx.effect(function () {
-        return ctx.locale.register(NS, { zh: zh, en: en });
+        return ctx.locale.register(NS, DICTS);
       }, "dsh-memoir: dictionaries");
 
       // 主区域的整页：侧边栏出现一个「全局面板」图标，点击把主区域切成记忆册。

@@ -110,7 +110,7 @@ const getJson = async (path, options) => {
 let r = await getJson(`${API_PREFIX}/state`);
 check("GET /state 返回 200", r.status === 200, r);
 check("GET /state 带记忆库目录", typeof r.body.dir === "string" && r.body.dir.length > 0, r.body.dir);
-check("GET /state 返回 6 个分类", r.body.categories.length === 6, r.body.categories.length);
+check("GET /state 返回 5 个分类", r.body.categories.length === 5, r.body.categories.length);
 check("分类带标题与提示", Boolean(r.body.categories[0].title && r.body.categories[0].hint));
 check(
   "GET /state 带运行时自述（重启后靠它辨认客户端加载的是哪一版）",
