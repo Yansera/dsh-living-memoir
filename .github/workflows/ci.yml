@@ -29,6 +29,20 @@ jobs:
           "
       - name: cordis.patch.yml 不是空的
         run: test -s cordis.patch.yml
+      - name: PowerShell 脚本必须带 UTF-8 BOM
+        run: |
+          # 大多数编辑器保存时会丢掉 BOM，然后脚本在 Windows PowerShell 5.1 上
+          # 会按 GBK 解码，中文注释直接把它变成解析错误。这条检查专治这个。
+          failed=0
+          for f in $(git ls-files '*.ps1'); do
+            if head -c 3 "$f" | od -An -tx1 | tr -d ' \n' | grep -q '^efbbbf'; then
+              echo "  OK   $f"
+            else
+              echo "::error file=$f::$f 缺少 UTF-8 BOM —— Windows PowerShell 5.1 会按 GBK 读它，中文注释会让脚本解析失败"
+              failed=1
+            fi
+          done
+          exit $failed
 
   self-test:
     name: 离线自测

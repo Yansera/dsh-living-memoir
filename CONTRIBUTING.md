@@ -6,6 +6,27 @@
 - 一个可用的 DeepSeek Harness 客户端（桌面版或 Web 版），用于联调
 - ⚠ Windows 上 `scripts/sync.ps1` 必须保持 **UTF-8 with BOM** 编码：Windows PowerShell 5.1 会按 GBK 读没有 BOM 的文件，中文注释会让它直接解析失败
 
+### ⚠ 改过 `.ps1` 之后，一定要补回 BOM
+
+大多数编辑器（以及各种自动改写工具）保存时会**丢掉 BOM**。丢了之后脚本仍然"看起来正常"，但一跑就是一串莫名其妙的「意外的标记」——根因只是编码。
+
+补回来的命令：
+
+```powershell
+$p = '.\scripts\sync.ps1'
+$t = [System.IO.File]::ReadAllText($p, [System.Text.Encoding]::UTF8)
+[System.IO.File]::WriteAllText($p, $t, (New-Object System.Text.UTF8Encoding $true))
+```
+
+验证：
+
+```powershell
+$b = [System.IO.File]::ReadAllBytes($p)
+'{0:X2} {1:X2} {2:X2}' -f $b[0], $b[1], $b[2]   # 要输出 EF BB BF
+```
+
+CI 里有一条检查专门盯这个，忘了会被拦下来。
+
 ## 目录结构
 
 ```
