@@ -1,7 +1,7 @@
 {
   "name": "@yansera/dsh-memoir",
   "version": "1.0.0",
-  "description": "记忆册：把跨会话记忆整理成分门别类、简短可读的 Markdown 活文档，并在 Web GUI 里提供专属页面浏览与编辑。",
+  "description": "Long-term memory for DeepSeek Harness: a short, categorized Markdown living document that gets rewritten instead of appended to, with a dedicated Web GUI page.",
   "keywords": [
     "dsh",
     "dsh-plugin",
