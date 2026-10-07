@@ -121,8 +121,28 @@ check("turn/end 触发了一次 LLM 调用", llmCalls === 1, llmCalls);
 check("提炼出的记忆落进记忆册", store.read("user").some((e) => e.text === "主人喜欢简短回复"), store.read("user"));
 check("来源被标成自动提炼", store.read("user")[0]?.source === "自动提炼", store.read("user")[0]);
 check("提炼压低推理档位（否则预算会被推理烧光、正文空体）", lastOptions?.reasoningEffort === "low", lastOptions?.reasoningEffort);
-check("maxTokens 用了配置值", lastOptions?.maxTokens === 4000, lastOptions?.maxTokens);
+check(
+  "maxTokens 不低于配置下限（实际会按记忆规模往上抬）",
+  Number.isFinite(lastOptions?.maxTokens) && lastOptions.maxTokens >= 4000,
+  lastOptions?.maxTokens
+);
 check("带了 purpose 便于审计", lastOptions?.purpose === "memoir-distill", lastOptions?.purpose);
+check(
+  "没在页面上配模型时，跟 Agent 的默认模型走",
+  lastOptions?.provider === "p" && lastOptions?.model === "m",
+  { provider: lastOptions?.provider, model: lastOptions?.model }
+);
+
+// 页面上配了模型：改写要用配的那个——这条是「支持本地模型 / 第三方 API」的全部实现
+config.distillProvider = "local-llama";
+config.distillModel = "qwen3-8b";
+llmCalls = 0;
+handlers["session/event"](makeSession("s1b", makeEvents(12)), { type: "turn/end" });
+await wait(80);
+check("配了 provider 就用配的", lastOptions?.provider === "local-llama", lastOptions?.provider);
+check("配了 model 就用配的", lastOptions?.model === "qwen3-8b", lastOptions?.model);
+config.distillProvider = "";
+config.distillModel = "";
 
 // 游标：同一段不该被重复消费
 llmCalls = 0;

@@ -4,7 +4,7 @@
 
 [![npm](https://img.shields.io/npm/v/@yansera/dsh-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-memoir)
 [![CI](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml/badge.svg)](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-212%20passing-2da44e)](test/)
+[![tests](https://img.shields.io/badge/tests-215%20passing-2da44e)](test/)
 [![license](https://img.shields.io/badge/license-MIT-8250df)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20.18-339933)](package.json)
 
@@ -283,7 +283,7 @@ $DSH_HOME/memoir/          ← 默认位置，可用 memoryDir 改
 ## 🛠 开发
 
 ```sh
-npm test                # 全部 212 项离线自测
+npm test                # 全部 215 项离线自测
 npm run test:store      # 存储层：解析、去重、移动、搜索、截断、注入文本
 npm run test:plugin     # host 端：注册面、工具执行、系统提示、HTTP 路由
 npm run test:client     # 页面半：用 React 替身渲染真 bundle，模拟点击并断言请求

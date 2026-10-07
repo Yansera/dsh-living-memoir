@@ -4,7 +4,7 @@
 
 [![npm](https://img.shields.io/npm/v/@yansera/dsh-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-memoir)
 [![CI](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml/badge.svg)](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-212%20passing-2da44e)](test/)
+[![tests](https://img.shields.io/badge/tests-215%20passing-2da44e)](test/)
 [![license](https://img.shields.io/badge/license-MIT-8250df)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20.18-339933)](package.json)
 
@@ -283,7 +283,7 @@ Non. Hormis la capacité `llm` de l'hôte pour la réécriture, il n'émet aucun
 ## 🛠 Développement
 
 ```sh
-npm test                # les 212 tests hors ligne
+npm test                # les 215 tests hors ligne
 npm run test:store      # stockage : analyse, déduplication, déplacements, recherche
 npm run test:plugin     # moitié hôte : enregistrements, outils, prompt, routes HTTP
 npm run test:client     # moitié navigateur : rend le vrai bundle avec un substitut React
