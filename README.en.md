@@ -173,35 +173,62 @@ Handy for "don't record this conversation" — much lighter than uninstalling.
 
 ### Which model does the rewriting
 
-| Field | Meaning |
-|---|---|
-| **Provider** | empty = follow the agent's default model. Otherwise the host's provider name |
-| **Model** | empty = follow the default. Otherwise a model id such as `qwen3-8b` |
-| **Reasoning effort** | `off` / `low` / `high` / `max` / `don't send` |
+The first dropdown **lists every model your host has already registered** — pick one and the two fields below fill themselves in.
 
-**Which models can I pick?** Any provider the **host already has registered**:
+**You don't need to know provider or model names.** The list comes from the host's:
+
+```ts
+ctx.llm.listProviders()          // every registered provider
+ctx.llm.listModels(provider)     // the models under each one
+```
+
+So whatever you want to use — as long as it's **wired into DSH** — it shows up there:
 
 - **Built into DSH** — e.g. `deepseek-flash` under `deepseek-official`
-- **A local model** — whatever local inference server you wired into DSH (Ollama, llama.cpp, …)
+- **A local model** — whatever local inference server you connected to DSH (Ollama, llama.cpp, …)
 - **A third-party API** — any OpenAI-compatible endpoint configured as a provider in DSH
 
-> The plugin **makes no network requests of its own**; everything goes through the host's `llm` capability. So what you can choose depends on what you've connected to DSH.
+| Field | Meaning |
+|---|---|
+| **Provider** | empty = follow the agent's default; or pick from the dropdown |
+| **Model** | empty = follow the default; or pick from the dropdown |
+| **Reasoning effort** | `off` / `low` / `high` / `max` / `don't send` |
+
+Two **hand-typed** fields remain below the dropdown, for anything the host doesn't list (a dynamically generated model id, say). **Both routes work.**
+
+> The plugin **makes no network requests of its own**; everything goes through the host's `llm` capability. So what you can choose depends on what you've connected to DSH. If the host has nothing registered, the dropdown says so instead of sitting blank.
 
 **Why is reasoning off by default?** Rewriting is **tidying**, not **problem solving**. We measured it: a thinking model burns the output budget on reasoning and then has nothing left for the actual text — which shows up as "request succeeded but not a single text block came back". Turning it off gives the whole budget to the text.
-
 ---
 
-## 🌍 Interface languages
+## 🌍 Two separate languages
+
+These are **two different switches**, and people tend to assume they're one:
+
+| | What it controls | Default |
+|---|---|---|
+| **Interface language** | buttons, labels, hints — the **UI text** | `en` (English) |
+| **Memory language** | **the words written into the md files**, category and section names included | `en` (English) |
+
+### Interface language
 
 **简体中文 · English · Français · Deutsch · 日本語**
 
-Two ways to switch:
+- **English by default** (this ships publicly)
+- You can also pick **Follow the host** — whatever language DSH uses
+- Switching happens **entirely in the browser**: no restart, no round trip to the server
 
-- **Follow the host** (default) — whatever language DSH uses
-- **Pick one in settings** — ⚙ → Language
+### Memory language
 
-Switching happens **entirely in the browser**: no restart, no round trip to the server.
+Once set, the rewrite prompt gains one more line:
 
+> 【语言】这份记忆册的内容一律用 X 写，分类名和小节名也是，不要混用其他语言。
+
+**It does not affect the interface** — the UI keeps whatever language it had.
+
+- **English by default**
+- Pick **Unrestricted** and the line isn't sent at all, letting the model follow the conversation's language
+- With no `llm` service this line can't take effect — rewriting never runs in that case
 ---
 
 ## 🔧 Configuration
@@ -226,9 +253,22 @@ Every deployment-varying knob lives in `cordis.patch.yml` (or an overlay in your
     bookEntryLimit: 40         # more than this in the book → forced tidy-up
 ```
 
-**Where do settings changed in the page go?** Into `.settings.json` inside the memory directory — alongside your data, so it survives profile changes and plugin upgrades.
-
 **Restart after changing configuration.** Same rule as code: hot reload only happens at install time.
+
+### Settings you change in the UI
+
+`cordis.patch.yml` holds **deployment-level** config; what you change under ⚙ is **runtime settings**, stored in `.settings.json` inside the memory dir — it travels with your memory data, survives profile switches, and isn't overwritten by plugin upgrades.
+
+| Key | Default | Meaning |
+|---|---|---|
+| `enabled` | `true` | master write switch; off means neither read nor write |
+| `distillProvider` | `""` | provider used for rewriting; empty follows the agent default |
+| `distillModel` | `""` | model used for rewriting; empty follows the default |
+| `distillReasoningEffort` | `""` | overrides the reasoning effort from config |
+| `locale` | `"en"` | interface language; `""` = follow the host |
+| `memoryLanguage` | `"en"` | memory content language; `""` = unrestricted |
+
+**The defaults are English UI + English memory** (this ships publicly). But they **only apply when the file doesn't exist** — once it does, the file wins, so choosing "Follow the host" or "Unrestricted" is stored as an empty string and never overwritten by the defaults.
 
 ---
 

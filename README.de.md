@@ -173,35 +173,62 @@ Praktisch für „diese Unterhaltung nicht mitschreiben“ — viel leichter als
 
 ### Welches Modell umschreibt
 
-| Feld | Bedeutung |
-|---|---|
-| **Anbieter** | leer = dem Standardmodell des Agenten folgen. Sonst der Anbietername des Hosts |
-| **Modell** | leer = Standard. Sonst eine Kennung wie `qwen3-8b` |
-| **Denkaufwand** | `aus` / `niedrig` / `hoch` / `maximal` / `nicht senden` |
+Die erste Auswahlliste **zeigt alle beim Host bereits registrierten Modelle** — eines anklicken, und die beiden Felder darunter füllen sich selbst.
 
-**Welche Modelle stehen zur Wahl?** Jeder **bereits beim Host registrierte** Anbieter:
+**Sie müssen weder Anbieternamen noch Modellkennung kennen.** Die Liste stammt vom Host:
+
+```ts
+ctx.llm.listProviders()          // alle registrierten Anbieter
+ctx.llm.listModels(provider)     // die Modelle je Anbieter
+```
+
+Was immer Sie nutzen wollen — **sofern es in DSH eingebunden ist** — erscheint dort:
 
 - **In DSH eingebaut** — z. B. `deepseek-flash` unter `deepseek-official`
 - **Ein lokales Modell** — der lokale Inferenzdienst, den Sie in DSH eingebunden haben (Ollama, llama.cpp, …)
 - **Eine Fremd-API** — jeder OpenAI-kompatible Endpunkt, der in DSH als Anbieter eingerichtet ist
 
-> Das Plugin **stellt selbst keine Netzwerkanfragen**; alles läuft über die `llm`-Fähigkeit des Hosts. Was wählbar ist, hängt davon ab, was Sie in DSH angebunden haben.
+| Feld | Bedeutung |
+|---|---|
+| **Anbieter** | leer = dem Standardmodell des Agenten folgen; oder aus der Liste wählen |
+| **Modell** | leer = Standard; oder aus der Liste wählen |
+| **Denkaufwand** | `aus` / `niedrig` / `hoch` / `maximal` / `nicht senden` |
+
+Unter der Liste bleiben zwei **Felder zum Eintippen**, für alles, was der Host nicht auflistet (etwa dynamisch erzeugte Kennungen). **Beide Wege funktionieren.**
+
+> Das Plugin **stellt selbst keine Netzwerkanfragen**; alles läuft über die `llm`-Fähigkeit des Hosts. Was wählbar ist, hängt davon ab, was Sie in DSH angebunden haben. Ist beim Host nichts registriert, sagt die Liste das, statt leer zu bleiben.
 
 **Warum ist das Denken standardmäßig aus?** Umschreiben ist **Aufräumen**, nicht **Lösen**. Gemessen: ein denkendes Modell verbrennt das Ausgabebudget im Nachdenken und hat dann nichts mehr für den Text — Symptom: „Anfrage erfolgreich, aber kein einziger Textblock“. Ausgeschaltet geht das ganze Budget in den Text.
-
 ---
 
-## 🌍 Oberflächensprachen
+## 🌍 Zwei getrennte Sprachen
+
+Das sind **zwei verschiedene Schalter**, die man leicht für einen hält:
+
+| | Was er steuert | Standard |
+|---|---|---|
+| **Oberflächensprache** | Schaltflächen, Beschriftungen, Hinweise — der **Oberflächentext** | `en` (English) |
+| **Sprache der Einträge** | **die Wörter in den md-Dateien**, einschließlich Kategorie- und Abschnittsnamen | `en` (English) |
+
+### Oberflächensprache
 
 **简体中文 · English · Français · Deutsch · 日本語**
 
-Zwei Wege:
+- **Standard ist Englisch** (das Paket wird öffentlich verteilt)
+- Alternativ **Dem Host folgen** — die Sprache, die DSH verwendet
+- Der Wechsel geschieht **vollständig im Browser**: kein Neustart, kein Weg zum Server
 
-- **Dem Host folgen** (Standard) — die Sprache, die DSH verwendet
-- **In den Einstellungen wählen** — ⚙ → Sprache
+### Sprache der Einträge
 
-Der Wechsel geschieht **vollständig im Browser**: kein Neustart, kein Weg zum Server.
+Einmal gesetzt, bekommt der Umschreibungs-Prompt eine Zeile mehr:
 
+> 【语言】这份记忆册的内容一律用 X 写，分类名和小节名也是，不要混用其他语言。
+
+**Die Oberfläche bleibt unberührt** — sie behält ihre eigene Sprache.
+
+- **Standard ist Englisch**
+- Mit **Uneingeschränkt** wird die Zeile gar nicht gesendet; das Modell folgt dann der Gesprächssprache
+- Ohne `llm`-Dienst kann die Zeile nichts bewirken — dann läuft gar keine Umschreibung
 ---
 
 ## 🔧 Konfiguration
@@ -226,9 +253,22 @@ Alles, was je nach Einsatz variiert, steht in `cordis.patch.yml` (oder einer Üb
     bookEntryLimit: 40         # darüber im Heft → Zwangs-Aufräumen
 ```
 
-**Wohin gehen in der Seite geänderte Einstellungen?** In `.settings.json` im Gedächtnisverzeichnis — bei Ihren Daten, also profil- und update-fest.
-
 **Nach Konfigurationsänderungen neu starten.** Dieselbe Regel wie beim Code: Hot Reload gibt es nur bei der Installation.
+
+### In der Oberfläche geänderte Einstellungen
+
+`cordis.patch.yml` enthält die **Bereitstellungs**-Konfiguration; was Sie unter ⚙ ändern, sind **Laufzeiteinstellungen** in `.settings.json` im Gedächtnisverzeichnis — sie wandern mit Ihren Daten, überstehen Profilwechsel und werden von Plugin-Updates nicht überschrieben.
+
+| Schlüssel | Standard | Bedeutung |
+|---|---|---|
+| `enabled` | `true` | Hauptschalter fürs Schreiben; aus = weder lesen noch schreiben |
+| `distillProvider` | `""` | Anbieter fürs Umschreiben; leer = Agent-Standard |
+| `distillModel` | `""` | Modell fürs Umschreiben; leer = Standard |
+| `distillReasoningEffort` | `""` | überschreibt den Denkaufwand aus der Konfiguration |
+| `locale` | `"en"` | Oberflächensprache; `""` = dem Host folgen |
+| `memoryLanguage` | `"en"` | Sprache der Einträge; `""` = uneingeschränkt |
+
+**Die Standardwerte sind englische Oberfläche + englische Einträge** (das Paket wird öffentlich verteilt). Sie gelten aber **nur, wenn die Datei nicht existiert** — sobald sie existiert, gilt sie: „Dem Host folgen“ oder „Uneingeschränkt“ wird als leerer String gespeichert und nie überschrieben.
 
 ---
 

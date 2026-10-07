@@ -173,35 +173,62 @@ Pratique pour « ne note pas cette conversation » — bien plus léger qu'une d
 
 ### Quel modèle réécrit
 
-| Champ | Sens |
-|---|---|
-| **Fournisseur** | vide = suivre le modèle par défaut de l'agent. Sinon, le nom du fournisseur côté hôte |
-| **Modèle** | vide = suivre le défaut. Sinon un identifiant, par exemple `qwen3-8b` |
-| **Effort de raisonnement** | `désactivé` / `faible` / `élevé` / `maximal` / `ne pas envoyer` |
+La première liste déroulante **affiche tous les modèles déjà enregistrés sur votre hôte** — choisissez-en un et les deux champs en dessous se remplissent tout seuls.
 
-**Quels modèles puis-je choisir ?** Tout fournisseur **déjà enregistré sur l'hôte** :
+**Vous n'avez pas besoin de connaître le nom du fournisseur ni l'identifiant du modèle.** La liste vient de l'hôte :
+
+```ts
+ctx.llm.listProviders()          // tous les fournisseurs enregistrés
+ctx.llm.listModels(provider)     // les modèles de chacun
+```
+
+Donc tout ce que vous voulez utiliser — **du moment que c'est branché sur DSH** — apparaît dans cette liste :
 
 - **Fourni avec DSH** — par ex. `deepseek-flash` sous `deepseek-official`
 - **Un modèle local** — le serveur d'inférence local que vous avez branché sur DSH (Ollama, llama.cpp, …)
 - **Une API tierce** — tout point de terminaison compatible OpenAI configuré comme fournisseur dans DSH
 
-> Le greffon **ne fait aucune requête réseau lui-même** : tout passe par la capacité `llm` de l'hôte. Ce que vous pouvez choisir dépend donc de ce que vous avez branché sur DSH.
+| Champ | Sens |
+|---|---|
+| **Fournisseur** | vide = suivre le modèle par défaut de l'agent ; ou choisir dans la liste |
+| **Modèle** | vide = suivre le défaut ; ou choisir dans la liste |
+| **Effort de raisonnement** | `désactivé` / `faible` / `élevé` / `maximal` / `ne pas envoyer` |
+
+Deux champs **à saisie manuelle** restent sous la liste, pour ce que l'hôte n'énumère pas (un identifiant généré dynamiquement, par exemple). **Les deux voies fonctionnent.**
+
+> Le greffon **ne fait aucune requête réseau lui-même** : tout passe par la capacité `llm` de l'hôte. Ce que vous pouvez choisir dépend donc de ce que vous avez branché sur DSH. Si l'hôte n'a rien enregistré, la liste le dit au lieu de rester vide.
 
 **Pourquoi le raisonnement est-il désactivé par défaut ?** Réécrire, c'est **ranger**, pas **résoudre**. Nous l'avons mesuré : un modèle « qui réfléchit » brûle le budget de sortie en raisonnement et n'a plus rien pour le texte — symptôme : « requête réussie mais aucun bloc de texte renvoyé ». Le désactiver donne tout le budget au texte.
-
 ---
 
-## 🌍 Langues de l'interface
+## 🌍 Deux langues distinctes
+
+Ce sont **deux réglages séparés**, et on les confond facilement :
+
+| | Ce qu'il contrôle | Défaut |
+|---|---|---|
+| **Langue de l'interface** | boutons, libellés, astuces — le **texte de l'interface** | `en` (English) |
+| **Langue des souvenirs** | **les mots écrits dans les fichiers md**, noms de catégories et de sections compris | `en` (English) |
+
+### Langue de l'interface
 
 **简体中文 · English · Français · Deutsch · 日本語**
 
-Deux façons de changer :
+- **Anglais par défaut** (le paquet est publié publiquement)
+- Vous pouvez aussi choisir **Suivre l'hôte** — la langue utilisée par DSH
+- Le changement se fait **entièrement côté navigateur** : sans redémarrage, sans aller-retour serveur
 
-- **Suivre l'hôte** (défaut) — la langue utilisée par DSH
-- **Choisir dans les réglages** — ⚙ → Langue
+### Langue des souvenirs
 
-Le changement se fait **entièrement côté navigateur** : sans redémarrage, sans aller-retour serveur.
+Une fois définie, le prompt de réécriture gagne une ligne :
 
+> 【语言】这份记忆册的内容一律用 X 写，分类名和小节名也是，不要混用其他语言。
+
+**Elle n'affecte pas l'interface** — celle-ci garde sa propre langue.
+
+- **Anglais par défaut**
+- Choisissez **Sans restriction** et la ligne n'est pas envoyée : le modèle suit la langue de la conversation
+- Sans service `llm`, cette ligne ne peut pas s'appliquer — la réécriture ne tourne alors jamais
 ---
 
 ## 🔧 Configuration
@@ -226,9 +253,22 @@ Tout ce qui varie selon le déploiement vit dans `cordis.patch.yml` (ou une surc
     bookEntryLimit: 40         # au-delà dans le carnet → rangement forcé
 ```
 
-**Où vont les réglages modifiés dans la page ?** Dans `.settings.json`, à l'intérieur du répertoire de mémoire — avec vos données, donc conservés malgré un changement de profil ou une mise à jour du greffon.
-
 **Redémarrez après un changement de configuration.** Même règle que pour le code : le rechargement à chaud n'a lieu qu'à l'installation.
+
+### Réglages modifiés dans la page
+
+`cordis.patch.yml` porte la configuration **de déploiement** ; ce que vous changez sous ⚙ sont des **réglages d'exécution**, stockés dans `.settings.json` au sein du répertoire de mémoire — ils voyagent avec vos données, survivent aux changements de profil et ne sont pas écrasés par les mises à jour du greffon.
+
+| Clé | Défaut | Sens |
+|---|---|---|
+| `enabled` | `true` | interrupteur principal d'écriture ; désactivé = ni lecture ni écriture |
+| `distillProvider` | `""` | fournisseur utilisé pour la réécriture ; vide = défaut de l'agent |
+| `distillModel` | `""` | modèle utilisé pour la réécriture ; vide = défaut |
+| `distillReasoningEffort` | `""` | remplace l'effort de raisonnement de la configuration |
+| `locale` | `"en"` | langue de l'interface ; `""` = suivre l'hôte |
+| `memoryLanguage` | `"en"` | langue du contenu des souvenirs ; `""` = sans restriction |
+
+**Les valeurs par défaut sont interface anglaise + souvenirs anglais** (le paquet est publié publiquement). Mais elles **ne s'appliquent que si le fichier n'existe pas** — dès qu'il existe, c'est lui qui prime : choisir « Suivre l'hôte » ou « Sans restriction » est stocké comme chaîne vide et jamais écrasé.
 
 ---
 
