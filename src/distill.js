@@ -302,11 +302,14 @@ export function createDistiller({ ctx, store, resolveConfig }) {
       maxTokens: outputBudget,
       purpose: "memoir-distill",
     };
-    const selected = route();
-    if (selected) {
-      base.provider = selected.provider;
-      base.model = selected.model;
-    }
+    // 改写用哪个模型：页面上配了就听页面的，没配就跟 Agent 的默认模型走。
+    // 配的是宿主的 provider/model 名 —— 本地模型和第三方 API 只要宿主已经注册过
+    // 那个 provider，这里就能直接选，插件自己不另发网络请求。
+    const wantProvider = String(config.distillProvider ?? "").trim();
+    const wantModel = String(config.distillModel ?? "").trim();
+    const selected = wantProvider || wantModel ? { provider: wantProvider, model: wantModel } : route();
+    if (selected?.provider) base.provider = selected.provider;
+    if (selected?.model) base.model = selected.model;
 
     // 思考型模型会把 token 预算烧在推理上、正文空体——mneme 在 dream 里踩过
     // 同一个坑（它为此专门配了 dreamReasoningEffort: low）。所以这里显式压低

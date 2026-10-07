@@ -649,16 +649,62 @@ async function readJsonBody(req) {
   return JSON.parse(raw);
 }
 
+/** 运行时可改设置的文件名。放在记忆库目录里，跟记忆数据一起走。 */
+const SETTINGS_FILE = ".settings.json";
+
+/**
+ * 运行时可改设置的读写。
+ *
+ * 存在记忆库目录里而不是包目录：换 profile 不丢、升级插件也不会把用户设置覆盖掉。
+ * 文件坏了或不存在都当「没设置过」——设置读不出来不该让整个插件起不来。
+ * @param dirOf - 返回当前记忆库目录的函数（目录本身是可配的）。
+ * @returns `{ read, write }`；write 是浅合并，只传要改的键。
+ */
+function createRuntimeSettings(dirOf) {
+  const fileOf = () => join(dirOf(), SETTINGS_FILE);
+  const read = () => {
+    try {
+      const parsed = JSON.parse(readFileSync(fileOf(), "utf8"));
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch {
+      return {};
+    }
+  };
+  const write = (patch) => {
+    const next = { ...read(), ...(patch ?? {}) };
+    const dir = dirOf();
+    if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+    const path = fileOf();
+    const tmp = `${path}.tmp-${process.pid}`;
+    writeFileSync(tmp, `${JSON.stringify(next, null, 2)}\n`, "utf8");
+    renameSync(tmp, path);
+    return next;
+  };
+  return { read, write };
+}
+
 /**
  * 插件入口。
  * @param ctx - 宿主上下文。
  * @param config - 解析后的配置（可能是 volatile 代理，读的时候再取）。
  */
 function apply(ctx, config) {
-  const resolveConfig = () => (typeof config?.get === "function" ? config.get() : config) ?? {};
+  const rawConfig = () => (typeof config?.get === "function" ? config.get() : config) ?? {};
   const configuredDir = () => {
-    const dir = String(resolveConfig().memoryDir ?? "").trim();
+    const dir = String(rawConfig().memoryDir ?? "").trim();
     return dir || join(dshHome(), "memoir");
+  };
+  const settings = createRuntimeSettings(configuredDir);
+  /**
+   * 生效的配置 = `cordis.patch.yml` 的配置，被页面上的运行时设置覆盖。
+   *
+   * 总开关关掉时，这里**强制**停掉注入和改写——「既不读取也不写入」这条
+   * 在最靠上的地方落定，下游每个读配置的地方自动跟着变，不用各自判断一遍。
+   */
+  const resolveConfig = () => {
+    const merged = { ...rawConfig(), ...settings.read() };
+    if (merged.enabled === false) return { ...merged, injectIndex: false, autoDistill: false };
+    return merged;
   };
   const store = createStore(configuredDir());
   store.ensureDir();
@@ -707,6 +753,9 @@ function apply(ctx, config) {
       ],
     },
     async execute(args) {
+      if (resolveConfig().enabled === false) {
+        throw new Error("记忆册的写入总开关是关的（在「记忆册」页面的设置里打开），这次不记。");
+      }
       const result = store.add({
         category: args.category,
         text: args.text,
@@ -744,6 +793,9 @@ function apply(ctx, config) {
       render: (_args, value) => [{ type: "text", text: value.text }],
     },
     async execute(args) {
+      if (resolveConfig().enabled === false) {
+        return { total: 0, text: "记忆册已被关闭（写入总开关），现在不读取任何记忆。" };
+      }
       const hits = store.search(args.query, args.category);
       const limit = Number.isFinite(args.limit) ? Math.max(1, Math.round(args.limit)) : 30;
       const shown = hits.slice(0, limit);
@@ -776,6 +828,9 @@ function apply(ctx, config) {
       ],
     },
     async execute(args) {
+      if (resolveConfig().enabled === false) {
+        throw new Error("记忆册的写入总开关是关的（在「记忆册」页面的设置里打开），这次不改动。");
+      }
       const removed = store.remove(String(args.id));
       return { removed, id: String(args.id) };
     },
@@ -813,8 +868,39 @@ function apply(ctx, config) {
           // 自动提炼是后台行为，而桌面客户端的宿主日志拿不到——把它的诊断
           // 一并暴露出来，出问题时 curl 一下就知道它跑没跑、卡在哪一步。
           distill: distiller ? distiller.stats() : { enabled: false },
+          settings: settings.read(),
+          effective: {
+            enabled: resolveConfig().enabled !== false,
+            injectIndex: resolveConfig().injectIndex !== false,
+            autoDistill: resolveConfig().autoDistill !== false,
+            distillProvider: String(resolveConfig().distillProvider ?? ""),
+            distillModel: String(resolveConfig().distillModel ?? ""),
+            distillReasoningEffort: String(resolveConfig().distillReasoningEffort ?? ""),
+          },
           categories: store.readAll(),
         });
+      },
+    },
+    {
+      // 页面上的设置面板读写这里。跟别的插件路由一样不需要 GUI token。
+      kind: "exact",
+      path: `${API_PREFIX}/settings`,
+      handler: async (req, res) => {
+        try {
+          if (req.method === "GET") {
+            sendJson(res, 200, { settings: settings.read(), effective: resolveConfig(), dir: configuredDir() });
+            return;
+          }
+          if (req.method === "PATCH" || req.method === "PUT" || req.method === "POST") {
+            const body = await readJsonBody(req);
+            const saved = settings.write(body);
+            sendJson(res, 200, { ok: true, settings: saved, effective: resolveConfig() });
+            return;
+          }
+          sendJson(res, 405, { error: `method not allowed: ${req.method}` });
+        } catch (error) {
+          sendJson(res, 400, { error: String(error?.message ?? error) });
+        }
       },
     },
     {
@@ -822,6 +908,11 @@ function apply(ctx, config) {
       path: `${API_PREFIX}/entry`,
       handler: async (req, res) => {
         try {
+          // 这个路由做的全是写操作（POST / PATCH / DELETE），总开关关掉就一律拒绝。
+          if (resolveConfig().enabled === false) {
+            sendJson(res, 403, { error: "记忆册的写入总开关是关的，先在「设置」里打开。" });
+            return;
+          }
           if (req.method === "POST") {
             const body = await readJsonBody(req);
             const { action, entry } = store.add({

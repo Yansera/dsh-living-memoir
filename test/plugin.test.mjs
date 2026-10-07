@@ -46,7 +46,7 @@ check(
   seen.tools.map((t) => t.name)
 );
 check("注册了 1 个系统提示 section", seen.sections.length === 1 && seen.sections[0].name === "memoir:index");
-check("注册了 3 条路由", seen.routes.length === 3, seen.routes.map((r) => r.path));
+check("注册了 4 条路由", seen.routes.length === 4, seen.routes.map((r) => r.path));
 check("每条注册都走 ctx.effect", seen.effects === 6, seen.effects);
 check("挂上了会话事件钩子（自动提炼）", seen.events.includes("session/event"), seen.events);
 
@@ -171,6 +171,48 @@ r = await getJson(`${API_PREFIX}/state`);
 const brandNew = r.body.categories.find((category) => category.id === "brand-new");
 check("新分类出现在 /state 里", Boolean(brandNew), r.body.categories.map((c) => c.id));
 check("新分类带上了中文名", brandNew?.title === "新分类", brandNew);
+
+// ── 设置面板：写入总开关 + 模型定制 ────────────────────────────────────────
+r = await getJson(`${API_PREFIX}/settings`, { method: "GET" });
+check("GET /settings 返回 200", r.status === 200, r);
+check("默认是开着的", r.body.effective.enabled !== false, r.body.effective);
+
+r = await getJson(`${API_PREFIX}/settings`, {
+  method: "PATCH",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({ distillProvider: "local-llama", distillModel: "qwen3-8b", distillReasoningEffort: "low" }),
+});
+check("PATCH /settings 存下模型定制", r.status === 200 && r.body.settings.distillModel === "qwen3-8b", r);
+check("生效配置读得到定制 provider", r.body.effective.distillProvider === "local-llama", r.body.effective);
+check("思考程度也存下来了", r.body.effective.distillReasoningEffort === "low", r.body.effective);
+
+r = await getJson(`${API_PREFIX}/settings`, {
+  method: "PATCH",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({ enabled: false, injectIndex: true, autoDistill: true }),
+});
+check("关掉总开关成功", r.status === 200 && r.body.effective.enabled === false, r);
+check("关掉总开关 → 注入被强制停掉（哪怕配置里写着 true）", r.body.effective.injectIndex === false, r.body.effective);
+check("关掉总开关 → 改写被强制停掉（哪怕配置里写着 true）", r.body.effective.autoDistill === false, r.body.effective);
+
+r = await getJson(`${API_PREFIX}/state`);
+check("关掉后 /state 也报 enabled=false", r.body.effective.enabled === false, r.body.effective);
+
+r = await getJson(`${API_PREFIX}/entry`, {
+  method: "POST",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({ category: "lessons", text: "关掉之后不该被写进去", importance: 3 }),
+});
+check("关掉后页面写入被拒（不是 200）", r.status >= 400, r);
+check("关掉后确实没写进去", !r.body?.entry, r.body);
+
+r = await getJson(`${API_PREFIX}/settings`, {
+  method: "PATCH",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({ enabled: true }),
+});
+check("重新打开总开关", r.status === 200 && r.body.effective.enabled === true, r.body.effective);
+check("打开后注入回到配置里的值", r.body.effective.injectIndex !== false, r.body.effective);
 
 await new Promise((resolve) => server.close(resolve));
 rmSync(dir, { recursive: true, force: true });
