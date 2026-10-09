@@ -92,7 +92,7 @@ pnpm 用 `file:` 装本地包时是**硬链接**，用编辑器改写源文件�
 ```
 client-modules: duplicate factory registration for "dsh-memoir"
 web boot: 1 entry did not activate
-@yansera/dsh-memoir: import failed
+@yansera/dsh-living-memoir: import failed
 ```
 
 `src/client.js` 第一行声明的 `id` 会被 client-modules 当作 factory 的注册键，**它必须等于 `package.json` 的 `name`**。两者不一致时注册键对不上，浏览器半直接装配失败——而且失败发生在启动阶段，整个界面都渲染不出来（侧边栏、会话列表全是空的，看起来像数据丢了，其实只是没渲染）。

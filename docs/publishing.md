@@ -33,7 +33,7 @@ npm publish
 装完之后用户侧是这样：
 
 ```sh
-dsh plugin --profile desktop add @yansera/dsh-memoir
+dsh plugin --profile desktop add @yansera/dsh-living-memoir
 ```
 
 ## 版本号怎么定
@@ -51,13 +51,13 @@ dsh plugin --profile desktop add @yansera/dsh-memoir
 npm 允许在发布后 **72 小时内**撤回：
 
 ```sh
-npm unpublish @yansera/dsh-memoir@1.0.1
+npm unpublish @yansera/dsh-living-memoir@1.0.1
 ```
 
 超过 72 小时只能标记废弃，然后发一个修好的新版本：
 
 ```sh
-npm deprecate @yansera/dsh-memoir@1.0.1 "有严重问题，请用 1.0.2"
+npm deprecate @yansera/dsh-living-memoir@1.0.1 "有严重问题，请用 1.0.2"
 ```
 
 **别删已经发布的版本**——已经装了它的人会拿到一个不存在的依赖，装不上也升不了级。

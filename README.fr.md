@@ -2,8 +2,8 @@
 
 [简体中文](README.md) · [English](README.en.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · **Français**
 
-[![npm](https://img.shields.io/npm/v/@yansera/dsh-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-memoir)
-[![CI](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml/badge.svg)](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@yansera/dsh-living-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-living-memoir)
+[![CI](https://github.com/Yansera/dsh-living-memoir/actions/workflows/ci.yml/badge.svg)](https://github.com/Yansera/dsh-living-memoir/actions/workflows/ci.yml)
 [![tests](https://img.shields.io/badge/tests-259%20passing-2da44e)](test/)
 [![license](https://img.shields.io/badge/license-MIT-8250df)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20.18-339933)](package.json)
@@ -44,7 +44,7 @@ En une phrase : **les autres travaillent sur ce qu'il faut retenir ; celui-ci tr
 ### 1. Installer
 
 ```sh
-dsh plugin --profile desktop add @yansera/dsh-memoir
+dsh plugin --profile desktop add @yansera/dsh-living-memoir
 ```
 
 > Remplacez `desktop` par le nom de votre profil (`web` en général côté web).
@@ -237,7 +237,7 @@ Tout ce qui varie selon le déploiement vit dans `cordis.patch.yml` (ou une surc
 
 ```yaml
 - id: memoir
-  name: '@yansera/dsh-memoir'
+  name: '@yansera/dsh-living-memoir'
   config:
     memoryDir: ''              # vide = $DSH_HOME/memoir
     injectIndex: true          # injecter l'index mémoire dans le prompt système

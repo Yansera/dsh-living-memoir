@@ -15,7 +15,7 @@ param([string]$Profile = 'desktop')
 
 $ErrorActionPreference = 'Stop'
 $src = Split-Path $PSScriptRoot -Parent
-$dst = Join-Path "D:\dsh\profiles\$Profile\node_modules" '@yansera\dsh-memoir'
+$dst = Join-Path "D:\dsh\profiles\$Profile\node_modules" '@yansera\dsh-living-memoir'
 
 if (-not (Test-Path $dst)) {
   Write-Host "安装位置不存在：$dst" -ForegroundColor Red

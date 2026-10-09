@@ -4,7 +4,7 @@
 
 ```yaml
 - id: memoir
-  name: '@yansera/dsh-memoir'
+  name: '@yansera/dsh-living-memoir'
   config:
     memoryDir: ''              # 留空 = $DSH_HOME/memoir
     injectIndex: true

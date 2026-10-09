@@ -2,8 +2,8 @@
 
 [简体中文](README.md) · [English](README.en.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · **日本語**
 
-[![npm](https://img.shields.io/npm/v/@yansera/dsh-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-memoir)
-[![CI](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml/badge.svg)](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@yansera/dsh-living-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-living-memoir)
+[![CI](https://github.com/Yansera/dsh-living-memoir/actions/workflows/ci.yml/badge.svg)](https://github.com/Yansera/dsh-living-memoir/actions/workflows/ci.yml)
 [![tests](https://img.shields.io/badge/tests-259%20passing-2da44e)](test/)
 [![license](https://img.shields.io/badge/license-MIT-8250df)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20.18-339933)](package.json)
@@ -44,7 +44,7 @@ Memoir は逆を行きます。解くのはただ一つ：**読みたくなる�
 ### 1. インストール
 
 ```sh
-dsh plugin --profile desktop add @yansera/dsh-memoir
+dsh plugin --profile desktop add @yansera/dsh-living-memoir
 ```
 
 > `desktop` は自分のプロファイル名に置き換えてください（Web 版は通常 `web`）。
@@ -237,7 +237,7 @@ ctx.llm.listModels(provider)     // それぞれのモデル
 
 ```yaml
 - id: memoir
-  name: '@yansera/dsh-memoir'
+  name: '@yansera/dsh-living-memoir'
   config:
     memoryDir: ''              # 空 = $DSH_HOME/memoir
     injectIndex: true          # 記憶索引をシステムプロンプトに注入する

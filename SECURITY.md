@@ -20,4 +20,4 @@
 
 ## 报告问题
 
-发现安全问题时，**不要**直接开公开 issue。请用 GitHub 的[私密漏洞报告](https://github.com/Yansera/dsh-memoir/security/advisories/new)功能告知，确认并修复后再公开。
+发现安全问题时，**不要**直接开公开 issue。请用 GitHub 的[私密漏洞报告](https://github.com/Yansera/dsh-living-memoir/security/advisories/new)功能告知，确认并修复后再公开。

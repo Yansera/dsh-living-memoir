@@ -1,5 +1,5 @@
 {
-  "name": "@yansera/dsh-memoir",
+  "name": "@yansera/dsh-living-memoir",
   "version": "1.0.0",
   "description": "Long-term memory for DeepSeek Harness: a short, categorized Markdown living document that gets rewritten instead of appended to, with a dedicated Web GUI page.",
   "keywords": [
@@ -12,13 +12,13 @@
     "markdown",
     "memoir"
   ],
-  "homepage": "https://github.com/Yansera/dsh-memoir#readme",
+  "homepage": "https://github.com/Yansera/dsh-living-memoir#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Yansera/dsh-memoir.git"
+    "url": "git+https://github.com/Yansera/dsh-living-memoir.git"
   },
   "bugs": {
-    "url": "https://github.com/Yansera/dsh-memoir/issues"
+    "url": "https://github.com/Yansera/dsh-living-memoir/issues"
   },
   "author": "Yansera <522988394@qq.com>",
   "license": "MIT",

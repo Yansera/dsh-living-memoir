@@ -10,7 +10,7 @@
 window.__ModuleLoader__.load({
   // bundle id 必须跟包名一致：client-modules 按它注册 factory，
   // 对不上（或与另一份 bundle 撞名）会在启动时报 duplicate factory registration。
-  id: "@yansera/dsh-memoir",
+  id: "@yansera/dsh-living-memoir",
   factory: (require) => {
     var module = { exports: {} };
     var exports = module.exports;
