@@ -242,6 +242,11 @@ function parseCategory(raw, category) {
         section,
         text: item[1],
         importance: 3,
+        // confidence：这条有多可信。high = 用户亲口说的；med = 从对话里提炼的；
+        // low = 助手推断的。改写要删东西时先丢 low。
+        confidence: "med",
+        // pinned：钉住的条目改写时必须原样保留（数量有上限）。
+        pinned: false,
         updatedAt: today(),
         source: "",
       };
@@ -256,6 +261,9 @@ function parseCategory(raw, category) {
         else if (key === "imp") current.importance = clampImportance(Number(value));
         else if (key === "at" && value) current.updatedAt = value;
         else if (key === "src" && value) current.source = value;
+        else if (key === "conf" && /^(high|med|low)$/.test(value)) current.confidence = value;
+        // pin 写成裸词（没有等号），也容忍 pin=true / pin=1。
+        else if (key === "pin") current.pinned = value === "" || value === "true" || value === "1";
       }
       continue;
     }
@@ -275,6 +283,19 @@ function parseCategory(raw, category) {
 }
 
 /** 把 1~5 之外的输入夹回合法区间；NaN 回落 3。 */
+/** 置信度取值；不认识的当 med。 */
+function normalizeConfidence(value) {
+  return value === "high" || value === "low" ? value : "med";
+}
+
+/** 两个置信度取较高的那个。 */
+function higherConfidence(a, b) {
+  const rank = { low: 0, med: 1, high: 2 };
+  const x = normalizeConfidence(a);
+  const y = normalizeConfidence(b);
+  return rank[x] >= rank[y] ? x : y;
+}
+
 function clampImportance(value) {
   if (!Number.isFinite(value)) return 3;
   return Math.min(5, Math.max(1, Math.round(value)));
@@ -348,8 +369,12 @@ function serializeCategory(category, entries) {
   if (entries.length === 0) return head + "\n";
 
   const bullet = (entry) => {
-    const meta = [`id=${entry.id || contentId(entry.text)}`, `imp=${entry.importance}`, `at=${entry.updatedAt}`];
+    const meta = [`id=${entry.id || contentId(entry.text)}`, `imp=${entry.importance}`];
+    // conf 只在非默认值时写——绝大多数条目是 med，全写出来会淹没正文。
+    if (entry.confidence && entry.confidence !== "med") meta.push(`conf=${entry.confidence}`);
+    meta.push(`at=${entry.updatedAt}`);
     if (entry.source) meta.push(`src=${entry.source}`);
+    if (entry.pinned) meta.push("pin");
     const text = entry.text.includes("\n") ? entry.text.split("\n").join("\n  ") : entry.text;
     return `- ${text}\n  <!-- memoir ${meta.join(" | ")} -->`;
   };
@@ -458,7 +483,7 @@ function createStore(memoryDir) {
    * 而这套东西存在的理由正是「短到有人愿意读」。
    * @returns `{ action, entry }`，action ∈ added | merged。
    */
-  const add = ({ category, text, importance, source, categoryTitle, section }) => {
+  const add = ({ category, text, importance, source, confidence, categoryTitle, section }) => {
     assertCategory(category);
     const clean = String(text ?? "").trim().slice(0, MAX_TEXT);
     if (!clean) throw new Error("memoir: empty text");
@@ -477,6 +502,8 @@ function createStore(memoryDir) {
       // 保留更完整的那条：包含关系里短句是长句的旧版本。
       if (clean.length > duplicate.text.length) duplicate.text = clean;
       duplicate.importance = clampImportance(Math.max(importance ?? 0, duplicate.importance));
+      // 置信度取两者较高的——用户亲口说过的，不该被一次自动提炼降级。
+      duplicate.confidence = higherConfidence(duplicate.confidence, confidence);
       duplicate.updatedAt = today();
       if (source) duplicate.source = String(source);
       write(category, entries, { title: categoryTitle });
@@ -488,6 +515,8 @@ function createStore(memoryDir) {
       section: String(section ?? "").trim(),
       text: clean,
       importance: clampImportance(importance ?? 3),
+      confidence: normalizeConfidence(confidence),
+      pinned: false,
       updatedAt: today(),
       source: source ? String(source) : "模型",
     };
@@ -571,6 +600,9 @@ function createStore(memoryDir) {
           section: String(entry.section ?? "").trim(),
           text: String(entry.text ?? "").trim().slice(0, MAX_TEXT),
           importance: clampImportance(entry.importance ?? 3),
+          // 置信度与钉住标记由改写层传下来；漏了就按「中等置信、没钉住」处理。
+          confidence: normalizeConfidence(entry.confidence),
+          pinned: entry.pinned === true,
           updatedAt: today(),
           source: entry.source ? String(entry.source) : "自动提炼",
         }))
@@ -752,6 +784,11 @@ function apply(ctx, config) {
       text: { type: "string", required: true, description: "一句话正文；写成陈述句" },
       importance: { type: "integer", description: "1-5，默认 3；5 表示每次会话都该看到" },
       source: { type: "string", description: "来源，例如「用户明确说」「观测」「从会话提炼」" },
+      confidence: {
+        type: "string",
+        description:
+          "这条有多可信：high = 用户亲口说的；med（默认）= 从对话里提炼的；low = 你自己推断的",
+      },
     },
     output: {
       schema: {
@@ -775,6 +812,7 @@ function apply(ctx, config) {
         category: args.category,
         text: args.text,
         importance: args.importance,
+        confidence: args.confidence,
         source: args.source,
         categoryTitle: args.category_title,
         section: args.section,

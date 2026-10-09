@@ -4,7 +4,7 @@
 
 [![npm](https://img.shields.io/npm/v/@yansera/dsh-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-memoir)
 [![CI](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml/badge.svg)](https://github.com/Yansera/dsh-memoir/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-247%20passing-2da44e)](test/)
+[![tests](https://img.shields.io/badge/tests-259%20passing-2da44e)](test/)
 [![license](https://img.shields.io/badge/license-MIT-8250df)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20.18-339933)](package.json)
 
@@ -324,7 +324,7 @@ Nein. Abgesehen von der `llm`-Fähigkeit des Hosts zum Umschreiben stellt es kei
 ## 🛠 Entwicklung
 
 ```sh
-npm test                # alle 247 Offline-Tests
+npm test                # alle 259 Offline-Tests
 npm run test:store      # Speicher: Analyse, Dedupe, Verschieben, Suche, Kürzung
 npm run test:plugin     # Host-Hälfte: Registrierungen, Werkzeuge, Prompt, HTTP-Routen
 npm run test:client     # Browser-Hälfte: rendert das echte Bundle mit React-Ersatz

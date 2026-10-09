@@ -123,6 +123,49 @@ try {
 }
 check("空正文抛错", threw);
 
+
+// 3b. 置信度（confidence）与钉住（pinned）
+const withConf = store.add({
+  category: "user",
+  text: "置信度往返测试条目",
+  importance: 4,
+  confidence: "high",
+  source: "测试",
+});
+check("带 confidence 的新增成功", withConf.action === "added", withConf.action);
+const rawUser = readFileSync(join(dir, "user.md"), "utf8");
+check("high 置信度写进了文件", rawUser.includes("conf=high"), rawUser.slice(0, 160));
+check("med 是默认值，不写进文件（省得淹没正文）", !rawUser.includes("conf=med"));
+
+// 改写会把整本换掉——用它来测 pinned 的往返
+store.replaceAll([
+  {
+    id: "user",
+    title: "主人",
+    hint: "他是谁",
+    entries: [
+      { section: "", text: "钉住的条目", importance: 5, confidence: "high", pinned: true },
+      { section: "", text: "没钉住的条目", importance: 3, confidence: "low", pinned: false },
+    ],
+  },
+]);
+const rawPinned = readFileSync(join(dir, "user.md"), "utf8");
+check("钉住的条目写出 pin 标记", rawPinned.includes("pin"), rawPinned);
+check("低置信度也写出来", rawPinned.includes("conf=low"), rawPinned);
+check("没钉住的条目不带 pin", !/没钉住的条目\n\s*<!--[^>]*\bpin\b/.test(rawPinned), rawPinned);
+
+const userCat = store.readAll().find((c) => c.id === "user");
+const pinEntry = userCat && userCat.entries.find((e) => e.text === "钉住的条目");
+check("读回来 pinned 仍是 true", Boolean(pinEntry) && pinEntry.pinned === true, pinEntry);
+check("读回来 confidence 仍是 high", Boolean(pinEntry) && pinEntry.confidence === "high", pinEntry);
+const loose = userCat && userCat.entries.find((e) => e.text === "没钉住的条目");
+check("没钉住的读回来 pinned 是 false", Boolean(loose) && loose.pinned === false, loose);
+check("没标 confidence 的默认是 med", Boolean(loose) && loose.confidence === "low", loose);
+
+// 合并时置信度取较高的：用户亲口说的不该被一次自动提炼降级
+const merged = store.add({ category: "user", text: "钉住的条目", importance: 5, confidence: "low" });
+check("重复条目走合并", merged.action === "merged", merged.action);
+check("合并后置信度没被降级", merged.entry.confidence === "high", merged.entry.confidence);
 rmSync(dir, { recursive: true, force: true });
 console.log(failures === 0 ? "\n全部通过" : `\n${failures} 项失败`);
 process.exit(failures === 0 ? 0 : 1);

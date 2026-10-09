@@ -95,14 +95,32 @@ const PROMPT_HEAD = `你是「记忆册」的编辑。下面给你两样东西�
 - hint：一句话说明这类放什么
 - entries：每条的 section 填第二层的名字（没有就留空），text 是一句话、陈述句、不超过 80 字、主语明确、不带时间戳、不带「本次」「刚才」这类词
 
+【决策要带上理由】
+写「选了什么」不够，要写**为什么**——理由才是以后看得懂的部分。
+  好：「记忆册用累积式改写而不是追加，因为要让它短到有人愿意读」
+  坏：「记忆册用累积式改写」← 半年后没人知道当初为什么这么选
+理由只在**真的知道**的时候写。不知道就只写结论，**不要编一个理由**。
+
+【置信度 confidence：每条都要标】
+- 「high」—— 用户亲口说的、明确要求的。**这类条目最不该丢。**
+- 「med」—— 从对话里提炼出来的，默认就是它。
+- 「low」—— 你自己推断、猜测、或者从上下文推出来的。
+**要腾地方的时候，先丢 low，再丢 med，绝不动 high。** 拿不准就写 med。
+
+【钉住 pinned：只在你确信不该丢的时候标】
+标了 pinned 为 true 的条目，**以后每次改写都必须原样保留**——这是给用户一个「别动这条」的开关。
+- 只在极少数条目标（整本最多 3~5 条）：用户的核心身份、铁律级的偏好、项目的根本立意。
+- 快照里已经带 PIN 标记的条目，**这次也必须继续保留**（除非用户明确要求删掉）。
+- 别的条目一律写 pinned 为 false。
+
 【规模：宁少勿多】合并优先于拆分——**能一句话说清的就别拆成两句**。
 这次改写如果让总条数**变多**了，先回头检查：那些新条目是不是本来就能并进已有句子？
 目标不是「记得全」，是「读一遍就懂」。软上限 30 条，硬上限 60 条。
 
 输出严格的 JSON 数组，一个元素是一个分类，前后不要任何别的文字：
 [{"id":"沿用一个已有的 id（新建时才自己起）","title":"沿用对应的 title","hint":"这类放什么","entries":[
-  {"section":"","text":"…","importance":1到5的整数},
-  {"section":"小节名","text":"…","importance":4}
+  {"section":"","text":"…","importance":4,"confidence":"high","pinned":true},
+  {"section":"小节名","text":"…","importance":3,"confidence":"med","pinned":false}
 ]}]
 
 **即使这段对话没有值得新增的，也要输出改写后的完整记忆册**（可以跟现在一模一样）。`;
@@ -169,6 +187,8 @@ export function parseRewrite(raw) {
           section: typeof entry.section === "string" ? entry.section.trim() : "",
           text: entry.text.trim(),
           importance: Number.isFinite(entry.importance) ? Math.min(5, Math.max(1, Math.round(entry.importance))) : 3,
+          confidence: ["high", "med", "low"].includes(entry.confidence) ? entry.confidence : "med",
+          pinned: entry.pinned === true,
         })),
     }));
 }
@@ -268,7 +288,11 @@ export function createDistiller({ ctx, store, resolveConfig }) {
         const head = `## ${category.id} — ${category.title}${category.hint ? `（${category.hint}）` : ""}`;
         const lines = category.entries.map((entry) => {
           const where = entry.section ? `{${entry.section}} ` : "";
-          return `- [${entry.importance}] ${where}${entry.text}`;
+          // 把置信度和钉住标记也告诉模型——否则它下一轮看不见哪些必须原样保留。
+        const flags = [entry.pinned ? "PIN" : "", entry.confidence && entry.confidence !== "med" ? entry.confidence.toUpperCase() : ""]
+          .filter(Boolean).join(" ");
+        const tag = flags ? `{${flags}} ` : "";
+        return `- [${entry.importance}] ${tag}${where}${entry.text}`;
         });
         return [head, ...(lines.length ? lines : ["（空）"])].join("\n");
       })
