@@ -2,238 +2,100 @@
 
 [简体中文](README.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · **English**
 
-[![npm](https://img.shields.io/npm/v/@yansera/dsh-living-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-living-memoir)
 [![CI](https://github.com/Yansera/dsh-living-memoir/actions/workflows/ci.yml/badge.svg)](https://github.com/Yansera/dsh-living-memoir/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-259%20passing-2da44e)](test/)
+[![npm](https://img.shields.io/npm/v/@yansera/dsh-living-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-living-memoir)
 [![license](https://img.shields.io/badge/license-MIT-8250df)](LICENSE)
-[![node](https://img.shields.io/badge/node-%3E%3D20.18-339933)](package.json)
 
-> **Cross-session memory for DeepSeek Harness, kept as a short, readable Markdown living document** — with a page of its own in the GUI.
+Cross-session memory for DeepSeek Harness. Memories are kept as a set of Markdown files that get rewritten in full at the end of each turn, instead of being appended to.
 
-![Memoir: one Markdown file per category, three layers deep, plus a dedicated page](docs/assets/hero.en.svg)
+![The page and the memory directory](docs/assets/hero.en.svg)
 
----
-
-## The problem it solves
-
-Almost every AI memory project is solving **"how do we remember more, and retrieve it better?"**
-
-Memoir goes the other way. It solves exactly one thing: **keeping the memory short enough that someone actually reads it.**
-
-One memory is one sentence. The whole book takes under two minutes to read. It doesn't grow with every turn of conversation — because it is **rewritten**, not **appended to**.
-
----
-
-## ✨ How it's different
-
-| | The usual approach | Memoir |
-|---|---|---|
-| **Growth** | Only ever grows; a human has to prune it | **Rewritten in full every turn**: merge, shorten, delete, add. Length follows content, not history |
-| **Model's role** | A clerk — append a line when something new shows up | An **editor** — reread everything and hand back a better version |
-| **Structure** | A flat list, or categories hard-coded in the source | **Three layers**: category → section → entry. Both categories and sections are created and dropped by the model, by topic |
-| **Data** | A database, a vector store, a private format | **Plain Markdown files.** Open them in any editor, edit by hand, put them in version control |
-| **Size control** | Errors out when it's full | **Capacity trigger**: past 12 entries in a category or 40 in the book, a forced tidy-up is issued |
-| **Turning it off** | Uninstall it | One **write switch** in the page. Off means nothing is read and nothing is written |
-
-In one line: **other projects work on what to remember; this one works on making it readable.**
-
----
-
-## 🚀 Quick start
-
-### 1. Install
+## 📦 Install
 
 ```sh
 dsh plugin --profile desktop add @yansera/dsh-living-memoir
 ```
 
-> Replace `desktop` with your profile name (usually `web` on the web build).
-> `dsh` ships with DeepSeek Harness — on the desktop client it lives at `<install dir>\resources\runtime\cli\bin\dsh.cmd`.
+Replace `desktop` with your profile name. `dsh` ships with DeepSeek Harness; on the desktop build it lives at `<install dir>\resources\runtime\cli\bin\dsh.cmd`.
 
-**From source** (for development):
+To install from source:
 
 ```sh
-dsh plugin --profile desktop add 'file:D:\path\to\dsh-memoir'
+dsh plugin --profile desktop add 'file:D:\path\to\dsh-living-memoir'
 ```
 
-### 2. Restart the client
+Fully quit the client and reopen it afterwards. DSH loads plugin code only at install time, and closing the window is not quitting.
 
-**This step is not optional.** DSH loads plugin code **at install time only**; editing files afterwards changes nothing. Closing the window is not quitting — fully exit and start it again.
+## 🚀 What it looks like
 
-### 3. Open it
+A "Memoir" entry appears in the sidebar. Clicking it takes over the main area: categories on the left, entries on the right. "← Back to chat" in the top left returns to the conversation.
 
-A **Memoir** icon appears in the sidebar. Click it and the main area becomes the memory page — categories on the left, entries on the right. **"← Back to chat"** in the top-left takes you back at any time.
+Nothing to configure after that. The model writes on its own when you state a lasting preference, settle a decision, or correct it. You can also click "Add entry", or edit the Markdown files under `$DSH_HOME/memoir/` directly; refresh the page to see the change.
 
-### 4. Use it
+To stop it, turn off "Memory writes" in the settings at the top right. With that off nothing is read and nothing is written.
 
-Nothing to configure. From here on:
-
-- **The model writes by itself** — when you state a lasting preference, settle a decision, or correct it, it calls `memoir_note`
-- **You can write too** — click "New entry", or **edit the Markdown files** under `$DSH_HOME/memoir/` directly (refresh the page and they show up)
-- **Every turn tidies up** — 20 seconds after a turn goes quiet, the background rereads the whole book and rewrites it
-
-**Want it to stop?** Top-right **⚙** → turn off **Memory writes**. Nothing is read, nothing is written, nothing changes on disk.
-
----
-
-## 🧱 Three layers, never more
+## 🧱 Three layers
 
 ```
-# Things in flight                ← layer 1: category. Structure and count follow the content
+# Things in flight
 
-<!-- projects, current stage · editable by hand -->
+<!-- one section per project · hand-editable -->
 
-## Memoir                         ← layer 2: section. One per project or topic
+## Memoir
 
-- Keeps cross-session memory as a short Markdown living document    ← layer 3: entry
-  <!-- memoir id=a1b2c3d4 | imp=4 | at=2026-10-07 | src=auto -->
+- Keeps cross-session memory as a short Markdown living document
+  <!-- memoir id=a1b2c3d4 | imp=4 | conf=high | at=2026-10-07 | src=user said so -->
 
 ## Net: semantic topology
 
-- Grow a network whose topology carries meaning, by mutation and selection
+- Grows a network whose topology carries meaning
 ```
 
-| Layer | Syntax | Decided by |
-|---|---|---|
-| **Category** | one `.md` file | the model, by topic — there is no hard-coded list |
-| **Section** | `## Project` | everything about one project goes under it; skip when it doesn't fit |
-| **Entry** | `- one sentence` | the end of the line — nothing deeper |
+The first layer is the category, one Markdown file each. The second is a section, usually one per project. The third is an entry: one sentence, and no deeper.
 
-**Why organise by topic instead of by kind?** Because when you look something up, you think *"which project was that?"*, not *"was that a decision or a status update?"*. Organising by kind scatters one project across several drawers.
+Categories are split by topic, not by kind of information. When people look something up they think "which project is this", not "is this a decision or a progress note". Everything about one project lives under its own section.
 
-Five categories are seeded on first run: **About the user · Preferences & rules · Things in flight · Decisions · About the assistant**. They're just a starting point — delete what you don't want.
+The number and shape of categories is decided by the model from the content; there is no fixed list. Five starter categories are laid down on install, and you can delete the ones you don't want. When a category grows too large, or turns out to hold two unrelated things, the model splits it.
 
----
+## ✍️ Three ways in
 
-## ✍️ Three write paths, one living document
+Model tools: the model decides something is worth keeping and calls `memoir_note`. `memoir_recall` and `memoir_forget` read and delete.
 
-![Three write paths feed one living document; a capacity trigger forces a tidy-up](docs/assets/pipeline.en.svg)
+The page: click "Add entry", or edit the Markdown files directly.
 
-| Path | Triggered by | Who writes |
-|---|---|---|
-| **Model tools** | the model decides something is worth keeping | `memoir_note` / `memoir_recall` / `memoir_forget` |
-| **The page** | you click "New entry", or edit the Markdown | you |
-| **Automatic rewrite** | end of every turn | the model rereads and hands back a full rewrite |
+Automatic rewriting: 20 seconds after a turn goes quiet, the whole book is read and a rewritten version is committed.
 
-> The first two **append**. The third **rewrites**. That third one is the whole point — it's what stops the document from only ever growing.
+The first two append. The third rewrites, and that is the point of the whole thing: it keeps the document from only ever growing.
 
----
+## 🔄 Automatic rewriting
 
-## 🔄 The automatic rewrite
+The model is given the full current contents of the book plus the new stretch of conversation, and returns a complete rewritten version. Merging, dropping, rewording and adding all happen in that one step.
 
-Once a turn goes quiet (20 seconds by default), the background **rewrites the entire book**:
+A few guards:
 
-> The model receives *the whole book as it stands* plus *this stretch of conversation*, and must return **the complete rewritten version** — anything to merge, merge it; anything stale, shorten it; anything dead, drop it; anything new, add it. Categories and sections can change shape too.
+- A per-session cursor consumes only events since the last run, so the same stretch is never rewritten twice
+- A failed run does not advance the cursor; the next turn end retries the same stretch
+- A stretch shorter than 400 characters is skipped, but the cursor still advances
+- Concurrent sessions queue rather than all firing at once
+- If categories cannot be parsed nothing is written; if the total entry count drops by more than half (from at least 6), the rewrite is rejected outright
 
-So it behaves like an **editor** maintaining a living document, not a clerk appending to a log.
-
-**Guard rails:**
-
-- **Per-session cursor** — only new events are consumed, so a stretch is never rewritten twice
-- **Failure doesn't advance the cursor** — the next turn retries the same stretch
-- **Too little content is skipped** (400 characters by default), but the cursor still advances
-- **Globally serialised** — when several sessions wrap up at once the requests queue instead of piling on
-- **Two safety nets**: if no categories can be parsed, nothing is written; if the entry count drops by more than half (when there were at least 6), the whole rewrite is rejected and the file is left alone
-
-If no `llm` service is available (no model configured on the host), the whole path is skipped silently and the tools and page keep working.
-
-### Capacity trigger
-
-A rewrite alone isn't enough — on its own it only makes small corrections while the count keeps climbing. So there are two thresholds:
-
-| Threshold | Default | Meaning |
-|---|---|---|
-| `pageEntryLimit` | 12 | entries in a single category |
-| `bookEntryLimit` | 40 | entries in the whole book |
-
-**Cross either one** and this rewrite also carries a **forced tidy-up order** stating exactly how many entries there are and which categories are over, and demanding three things:
-
-1. **Merge** — fold synonyms and closely related entries into one sentence
-2. **Shorten** — compress wordy entries down to the conclusion
-3. **Add sections** — split an overfull category with `##` instead of leaving twenty entries flat
-
-**When nothing is over the line, none of this is added** and the rewrite stays light.
-
----
+Each entry carries two marks. `conf` is confidence: `high` for something you said yourself, `med` for something distilled from the conversation, `low` for something the model inferred. When space is needed, `low` goes first. `pin` means pinned: a pinned entry must survive a rewrite unchanged. There are at most a handful of those.
 
 ## ⚙️ Settings
 
-Top-right **⚙** in the page.
+The gear icon at the top right. Changes are stored in `.settings.json` inside the memory directory, alongside your data, so they survive a profile switch.
 
-### Write switch
+With the master write switch off, memory is no longer injected into the prompt, the three tools refuse to run, writes from the page and over HTTP return 403, and automatic rewriting stops.
 
-Off means **nothing is read and nothing is written**:
+The model used for rewriting is picked from what the host already has registered. The plugin calls `ctx.llm.listProviders()` and `ctx.llm.listModels(provider)` and turns the result into a dropdown, so you never type a provider name or a model id. Anything wired into DSH shows up there, whether built in, local, or a third-party API. There are still two fields below the dropdown for anything the host does not list.
 
-- memory is no longer injected into the system prompt
-- all three tools refuse to run
-- writes from the page and the HTTP API return 403
-- the automatic rewrite stops
+Reasoning is off by default. Rewriting is tidying, not problem solving, and a thinking model spends the output budget on reasoning and returns no text at all.
 
-Handy for "don't record this conversation" — much lighter than uninstalling.
-
-### Which model does the rewriting
-
-The first dropdown **lists every model your host has already registered** — pick one and the two fields below fill themselves in.
-
-**You don't need to know provider or model names.** The list comes from the host's:
-
-```ts
-ctx.llm.listProviders()          // every registered provider
-ctx.llm.listModels(provider)     // the models under each one
-```
-
-So whatever you want to use — as long as it's **wired into DSH** — it shows up there:
-
-- **Built into DSH** — e.g. `deepseek-flash` under `deepseek-official`
-- **A local model** — whatever local inference server you connected to DSH (Ollama, llama.cpp, …)
-- **A third-party API** — any OpenAI-compatible endpoint configured as a provider in DSH
-
-| Field | Meaning |
-|---|---|
-| **Provider** | empty = follow the agent's default; or pick from the dropdown |
-| **Model** | empty = follow the default; or pick from the dropdown |
-| **Reasoning effort** | `off` / `low` / `high` / `max` / `don't send` |
-
-Two **hand-typed** fields remain below the dropdown, for anything the host doesn't list (a dynamically generated model id, say). **Both routes work.**
-
-> The plugin **makes no network requests of its own**; everything goes through the host's `llm` capability. So what you can choose depends on what you've connected to DSH. If the host has nothing registered, the dropdown says so instead of sitting blank.
-
-**Why is reasoning off by default?** Rewriting is **tidying**, not **problem solving**. We measured it: a thinking model burns the output budget on reasoning and then has nothing left for the actual text — which shows up as "request succeeded but not a single text block came back". Turning it off gives the whole budget to the text.
----
-
-## 🌍 Two separate languages
-
-These are **two different switches**, and people tend to assume they're one:
-
-| | What it controls | Default |
-|---|---|---|
-| **Interface language** | buttons, labels, hints — the **UI text** | `en` (English) |
-| **Memory language** | **the words written into the md files**, category and section names included | `en` (English) |
-
-### Interface language
-
-**简体中文 · English · Français · Deutsch · 日本語**
-
-- **English by default** (this ships publicly)
-- You can also pick **Follow the host** — whatever language DSH uses
-- Switching happens **entirely in the browser**: no restart, no round trip to the server
-
-### Memory language
-
-Once set, the rewrite prompt gains one more line:
-
-> 【语言】这份记忆册的内容一律用 X 写，分类名和小节名也是，不要混用其他语言。
-
-**It does not affect the interface** — the UI keeps whatever language it had.
-
-- **English by default**
-- Pick **Unrestricted** and the line isn't sent at all, letting the model follow the conversation's language
-- With no `llm` service this line can't take effect — rewriting never runs in that case
----
+Interface language and memory language are separate switches. The first changes buttons and labels; the second decides which language is written into the files, category and section names included. Both default to English.
 
 ## 🔧 Configuration
 
-Every deployment-varying knob lives in `cordis.patch.yml` (or an overlay in your profile). Nothing is hard-coded.
+Deployment-level configuration goes in `cordis.patch.yml`:
 
 ```yaml
 - id: memoir
@@ -244,116 +106,72 @@ Every deployment-varying knob lives in `cordis.patch.yml` (or an overlay in your
     maxInjectEntries: 12       # how many entries to inject at most
     autoDistill: true          # rewrite at the end of every turn
     distillDebounceMs: 20000   # quiet period before rewriting (ms)
-    distillMinChars: 400       # skip when the new stretch is shorter than this
-    distillMaxItems: 60        # book-wide entry ceiling, suggested to the model
-    distillMaxTokens: 8000     # output budget floor (scales up with book size)
-    distillReasoningEffort: off # rewriting needs no reasoning; save the budget for text
-    memoryLanguage: ''       # language used for the saved text; empty = unrestricted
-    pageEntryLimit: 12         # more than this in one category → forced tidy-up
-    bookEntryLimit: 40         # more than this in the book → forced tidy-up
+    distillMinChars: 400       # skip stretches shorter than this
+    distillMaxItems: 60        # entry ceiling for the whole book
+    distillMaxTokens: 8000     # output budget floor; raised automatically with size
+    distillReasoningEffort: off # rewriting needs no reasoning
+    memoryLanguage: ''         # language of the entries; empty = unrestricted
+    pageEntryLimit: 12         # entries per category that trigger a forced tidy-up
+    bookEntryLimit: 40         # entries in the book that trigger a forced tidy-up
 ```
 
-**Restart after changing configuration.** Same rule as code: hot reload only happens at install time.
+A restart is needed afterwards, same as for code changes.
 
-### Settings you change in the UI
+## 📂 What the files look like
 
-`cordis.patch.yml` holds **deployment-level** config; what you change under ⚙ is **runtime settings**, stored in `.settings.json` inside the memory dir — it travels with your memory data, survives profile switches, and isn't overwritten by plugin upgrades.
+One Markdown file per category. Plain text, openable in any editor, fine under version control. No database, no cache, no private format.
 
-| Key | Default | Meaning |
-|---|---|---|
-| `enabled` | `true` | master write switch; off means neither read nor write |
-| `distillProvider` | `""` | provider used for rewriting; empty follows the agent default |
-| `distillModel` | `""` | model used for rewriting; empty follows the default |
-| `distillReasoningEffort` | `""` | overrides the reasoning effort from config |
-| `locale` | `"en"` | interface language; `""` = follow the host |
-| `memoryLanguage` | `"en"` | memory content language; `""` = unrestricted |
-
-**The defaults are English UI + English memory** (this ships publicly). But they **only apply when the file doesn't exist** — once it does, the file wins, so choosing "Follow the host" or "Unrestricted" is stored as an empty string and never overwritten by the defaults.
-
----
-
-## 📂 Storage format
+Entry metadata sits in HTML comments and does not get in the way of reading:
 
 ```
-$DSH_HOME/memoir/          ← default; change it with memoryDir
-├── .order                 ← category order, one id per line
-├── .settings.json         ← settings changed in the page
-├── user.md                ← one file = one category
-└── ...
+- Asks before any download, and wants the size in GB
+  <!-- memoir id=8daa8849 | imp=5 | conf=high | at=2026-10-09 | src=user said so | pin -->
 ```
 
-**No database, no index, no cache.** Every read and write goes straight to disk — the files are tiny, and the payoff is that hand-editing a file shows up on the next page refresh.
+Adding a line that starts with `- ` adds an entry. The parser recognises three kinds of line (`# category`, `## section`, `- entry`) and ignores everything else.
 
-**Hand-editing rules:**
+## ❓ Questions
 
-| Line | Meaning |
-|---|---|
-| `# Title` | the category's display name (header, skipped) |
-| `## Section` | layer-two section; entries below it belong to it |
-| `- text` | one memory |
-| `  <!-- memoir … -->` | metadata for the entry above (can be omitted entirely) |
-| lines indented 2+ spaces | continuation of the entry above |
-| anything else (blank, prose, `###`) | formatting, ignored |
+**Does it clash with other memory setups.** No. Memoir only handles the long-term, high-level layer: who the user is, who the assistant is, what is in flight, which big decisions were made. Short-term and procedural content, such as technical details, pitfalls and progress logs, is out of scope and never written here. The data lives in its own directory.
 
-**Ids are derived from content**: if the text doesn't change, the id doesn't change. That's why a full rewrite never breaks your position in the page.
+**Will it just keep growing.** No. It is rewritten rather than appended to, so its length follows the content and not the history. Passing 12 entries in a category or 40 in the book triggers a forced tidy-up.
 
----
+**What if a memory gets rewritten wrong.** Every category file can be edited directly, and a page refresh picks the change up. The next rewrite respects category names you have changed. Important entries can be marked `pin`.
 
-## ❓ FAQ
+**Does it send data anywhere.** No. The plugin makes no network requests of its own; rewriting goes through the host's own `llm` capability.
 
-**Will it clash with other memory features in my setup?**
-No. Memoir only handles the **long-term, high-level** layer — who the user is, who the assistant is, what's in flight, which big calls were made. Short-term and procedural content (technical details, pitfalls, progress logs) is out of scope and never written here. Its data lives in its own directory, with no reads or writes across systems.
-
-**Why is there no technical detail in my book?**
-On purpose. Technical detail buries the "About the user" card under twenty command lines and then nobody reads it. That belongs to another memory system.
-
-**Do I need to restart after editing the Markdown?**
-No. Reads happen live on every request; refresh the page and you'll see it.
-
-**Does turning the write switch off lose data?**
-No. It stops reading and writing; the files stay on disk exactly as they were, and turning it back on resumes.
-
-**Does it make any network requests behind my back?**
-No. Apart from the host's `llm` capability for rewriting, it makes no requests of its own, reads nothing outside the memory directory, and collects no telemetry.
-
-**Will my memories be sent to a model provider?**
-**Yes** — the memory index is injected into every model request, and a rewrite sends the whole book. So **never put passwords, tokens or private keys in your memory**. See [SECURITY.md](SECURITY.md).
-
----
+**Can I take the memory with me.** Yes. The whole memory store is one directory; copy it.
 
 ## 🛠 Development
 
 ```sh
-npm test                # all 259 offline tests
-npm run test:store      # storage: parsing, dedupe, moves, search, truncation, inject text
-npm run test:plugin     # host half: registrations, tool calls, system prompt, HTTP routes
-npm run test:client     # browser half: renders the real bundle with a React stand-in
-npm run test:distill    # rewrite: output parsing, debounce, cursor, retries, capacity trigger
+npm test                # all 259 offline self-tests
+npm run test:store      # storage: parsing, dedupe, move, search, injected text
+npm run test:plugin     # host half: registrations, tools, prompt, HTTP routes
+npm run test:client     # page half: real bundle rendered against a React stand-in
+npm run test:distill    # rewriting: parsing, debounce, cursors, retries
 ```
 
-Everything runs offline: no DSH host required, and no real profile is touched.
+The tests are fully offline. They need no DSH host and touch no real profile.
 
-**After changing the source** (Windows):
+After changing source (Windows):
 
 ```powershell
 & .\scripts\sync.ps1
 ```
 
-pnpm hardlinks `file:` dependencies, so editing the source breaks the link and the installed copy goes stale — sync, then restart the client.
+When pnpm installs a local package through `file:`, it hard-links the files. Editing the source breaks the link and the installed copy stops updating, so a sync and a restart are both required.
 
-**Layout:**
+Layout:
 
 ```
-src/       implementation (index = host half, distill = rewrite, client = browser half)
-test/      offline tests
+src/       the implementation (index = host half, distill = rewriting, client = page half)
+test/      offline self-tests
 docs/      design and format notes
-scripts/   sync script, live smoke test
+scripts/   sync script, smoke test against a running client
 ```
 
-More detail in [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/](docs/):
-[design](docs/design.md) · [storage format](docs/storage-format.md) · [configuration](docs/configuration.md).
-
----
+More detail in [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/](docs/): [design](docs/design.md), [storage format](docs/storage-format.md), [configuration](docs/configuration.md).
 
 ## 📄 License
 

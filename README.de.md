@@ -2,238 +2,100 @@
 
 [简体中文](README.md) · [English](README.en.md) · [Français](README.fr.md) · [日本語](README.ja.md) · **Deutsch**
 
-[![npm](https://img.shields.io/npm/v/@yansera/dsh-living-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-living-memoir)
 [![CI](https://github.com/Yansera/dsh-living-memoir/actions/workflows/ci.yml/badge.svg)](https://github.com/Yansera/dsh-living-memoir/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-259%20passing-2da44e)](test/)
+[![npm](https://img.shields.io/npm/v/@yansera/dsh-living-memoir?color=0969da&label=npm)](https://www.npmjs.com/package/@yansera/dsh-living-memoir)
 [![license](https://img.shields.io/badge/license-MIT-8250df)](LICENSE)
-[![node](https://img.shields.io/badge/node-%3E%3D20.18-339933)](package.json)
 
-> **Sitzungsübergreifendes Gedächtnis für DeepSeek Harness — geführt als kurzes, lesbares Markdown-Lebenddokument**, mit eigener Seite in der Oberfläche.
+Sitzungsübergreifendes Gedächtnis für DeepSeek Harness. Erinnerungen liegen als eine Gruppe von Markdown-Dateien vor, die am Ende jeder Runde vollständig neu geschrieben werden, statt aneinandergehängt zu werden.
 
-![Memoir: eine Markdown-Datei je Kategorie, drei Ebenen, plus eine eigene Seite](docs/assets/hero.en.svg)
+![Die Seite und das Gedächtnisverzeichnis](docs/assets/hero.en.svg)
 
----
-
-## Welches Problem es löst
-
-Fast jedes KI-Gedächtnisprojekt arbeitet daran, **mehr zu behalten und besser wiederzufinden**.
-
-Memoir geht den umgekehrten Weg. Es löst genau eine Sache: **das Gedächtnis so kurz zu halten, dass es jemand tatsächlich liest.**
-
-Eine Erinnerung ist ein Satz. Das ganze Heft zu lesen dauert unter zwei Minuten. Es wächst nicht mit jedem Gesprächsschritt — denn es wird **umgeschrieben**, nicht **angehängt**.
-
----
-
-## ✨ Was anders ist
-
-| | Der übliche Weg | Memoir |
-|---|---|---|
-| **Wachstum** | Wächst nur; ein Mensch muss ausdünnen | **Jede Runde vollständig umgeschrieben**: zusammenfassen, kürzen, löschen, ergänzen. Länge folgt dem Inhalt, nicht der Historie |
-| **Rolle des Modells** | Ein Schreiber — hängt eine Zeile an, wenn Neues auftaucht | Ein **Lektor** — liest alles und liefert eine bessere Fassung |
-| **Struktur** | Eine flache Liste oder im Code fest verdrahtete Kategorien | **Drei Ebenen**: Kategorie → Abschnitt → Eintrag. Kategorien und Abschnitte legt das Modell nach Thema an und wieder ab |
-| **Daten** | Datenbank, Vektorindex, eigenes Format | **Einfache Markdown-Dateien.** In jedem Editor zu öffnen, von Hand zu ändern, versionierbar |
-| **Größenkontrolle** | Fehler, wenn voll | **Kapazitätsauslöser**: über 12 Einträge in einer Kategorie oder 40 im Heft wird ein Zwangs-Aufräumen verlangt |
-| **Abschalten** | Deinstallieren | Ein **Schreibschalter** in der Seite. Aus heißt: nichts wird gelesen, nichts geschrieben |
-
-In einem Satz: **andere arbeiten daran, was man behalten soll; dieses hier daran, dass man es lesen kann.**
-
----
-
-## 🚀 Schnellstart
-
-### 1. Installieren
+## 📦 Installation
 
 ```sh
 dsh plugin --profile desktop add @yansera/dsh-living-memoir
 ```
 
-> `desktop` durch den eigenen Profilnamen ersetzen (im Web-Build meist `web`).
-> `dsh` gehört zu DeepSeek Harness — im Desktop-Client unter `<Installationsordner>\resources\runtime\cli\bin\dsh.cmd`.
+Ersetzen Sie `desktop` durch Ihren Profilnamen. `dsh` gehört zu DeepSeek Harness; in der Desktop-Version liegt es unter `<Installationsordner>\resources\runtime\cli\bin\dsh.cmd`.
 
-**Aus dem Quelltext** (Entwicklung):
+Aus den Quellen installieren:
 
 ```sh
-dsh plugin --profile desktop add 'file:D:\pfad\zu\dsh-memoir'
+dsh plugin --profile desktop add 'file:D:\Pfad\zu\dsh-living-memoir'
 ```
 
-### 2. Client neu starten
+Beenden Sie danach den Client vollständig und starten Sie ihn neu. DSH lädt Plugin-Code nur im Moment der Installation, und das Fenster zu schließen ist kein Beenden.
 
-**Dieser Schritt ist nicht optional.** DSH lädt Plugin-Code **nur im Moment der Installation**; spätere Dateiänderungen zählen nicht. Das Fenster zu schließen beendet die Anwendung nicht — wirklich beenden und neu starten.
+## 🚀 Wie es aussieht
 
-### 3. Öffnen
+In der Seitenleiste erscheint ein Eintrag „Memoir“. Ein Klick darauf füllt den Hauptbereich: links die Kategorien, rechts die Einträge. „← Zurück zum Chat“ oben links führt zurück ins Gespräch.
 
-In der Seitenleiste erscheint ein **Memoir**-Symbol. Ein Klick macht den Hauptbereich zur Gedächtnisseite: links Kategorien, rechts Einträge. **„← Zurück zum Chat“** oben links führt jederzeit zurück.
+Danach ist nichts zu konfigurieren. Das Modell schreibt von selbst, wenn Sie eine dauerhafte Vorliebe äußern, eine Entscheidung festhalten oder es korrigieren. Sie können auch auf „Eintrag hinzufügen“ klicken oder die Markdown-Dateien unter `$DSH_HOME/memoir/` direkt bearbeiten; laden Sie die Seite neu, um die Änderung zu sehen.
 
-### 4. Benutzen
+Zum Anhalten schalten Sie „Gedächtnis schreiben“ in den Einstellungen oben rechts aus. In diesem Zustand wird nichts gelesen und nichts geschrieben.
 
-Nichts zu konfigurieren. Danach:
-
-- **Das Modell schreibt selbst** — bei dauerhaften Vorlieben, getroffenen Entscheidungen oder Korrekturen ruft es `memoir_note`
-- **Sie können auch schreiben** — „Neuer Eintrag“, oder **die Markdown-Dateien direkt bearbeiten** unter `$DSH_HOME/memoir/` (Seite neu laden genügt)
-- **Jede Runde räumt auf** — 20 Sekunden nachdem eine Runde zur Ruhe kommt, liest der Hintergrund das ganze Heft und schreibt es neu
-
-**Soll es aufhören?** Oben rechts **⚙** → **Gedächtnis-Schreiben** ausschalten. Dann wird nichts gelesen und nichts geschrieben.
-
----
-
-## 🧱 Drei Ebenen, nie mehr
+## 🧱 Drei Ebenen
 
 ```
-# Laufende Vorhaben              ← Ebene 1: Kategorie. Struktur und Anzahl folgen dem Inhalt
+# Laufende Vorhaben
 
-<!-- Projekte, aktueller Stand · von Hand editierbar -->
+<!-- ein Abschnitt pro Projekt · von Hand bearbeitbar -->
 
-## Memoir                        ← Ebene 2: Abschnitt. Einer je Projekt oder Thema
+## Memoir
 
-- Hält sitzungsübergreifendes Gedächtnis als kurzes Markdown-Lebenddokument    ← Ebene 3: Eintrag
-  <!-- memoir id=a1b2c3d4 | imp=4 | at=2026-10-07 | src=auto -->
+- Hält sitzungsübergreifendes Gedächtnis als kurzes lebendes Markdown-Dokument
+  <!-- memoir id=a1b2c3d4 | imp=4 | conf=high | at=2026-10-07 | src=Nutzer hat es gesagt -->
 
 ## Netz: semantische Topologie
 
-- Ein Netz wachsen lassen, dessen Topologie Bedeutung trägt — durch Mutation und Auslese
+- Lässt ein Netz wachsen, dessen Topologie Bedeutung trägt
 ```
 
-| Ebene | Syntax | Entschieden von |
-|---|---|---|
-| **Kategorie** | eine `.md`-Datei | dem Modell, nach Thema — es gibt keine feste Liste im Code |
-| **Abschnitt** | `## Projekt` | alles zu einem Projekt gehört darunter; weglassen, wenn unpassend |
-| **Eintrag** | `- ein Satz` | Ende der Hierarchie — nichts Tieferes |
+Die erste Ebene ist die Kategorie, je eine Markdown-Datei. Die zweite ist ein Abschnitt, meist einer pro Projekt. Die dritte ist ein Eintrag: ein Satz, und nicht tiefer.
 
-**Warum nach Thema statt nach Art?** Weil man beim Suchen denkt *„welches Projekt war das?“* und nicht *„war das eine Entscheidung oder ein Fortschritt?“*. Nach Art zu ordnen verstreut ein Projekt über mehrere Schubladen.
+Kategorien sind nach Thema geschnitten, nicht nach Art der Information. Beim Nachschlagen denkt man „welches Projekt ist das“, nicht „ist das eine Entscheidung oder ein Fortschrittsnotiz“. Alles zu einem Projekt liegt unter seinem eigenen Abschnitt.
 
-Beim ersten Start werden fünf Kategorien angelegt: **Zum Nutzer · Vorlieben und Regeln · Laufende Vorhaben · Entscheidungen · Zum Assistenten**. Nur ein Anfang — löschen Sie, was Sie nicht brauchen.
+Anzahl und Form der Kategorien bestimmt das Modell aus dem Inhalt; eine feste Liste gibt es nicht. Bei der Installation werden fünf Startkategorien angelegt, und Sie löschen die, die Sie nicht brauchen. Wird eine Kategorie zu groß oder enthält sie doch zwei unzusammenhängende Dinge, teilt das Modell sie.
 
----
+## ✍️ Drei Wege hinein
 
-## ✍️ Drei Schreibwege, ein Lebenddokument
+Modellwerkzeuge: das Modell hält etwas für erhaltenswert und ruft `memoir_note` auf. `memoir_recall` und `memoir_forget` lesen und löschen.
 
-![Drei Schreibwege speisen ein Lebenddokument; ein Kapazitätsschwellwert erzwingt ein Aufräumen](docs/assets/pipeline.en.svg)
+Die Seite: auf „Eintrag hinzufügen“ klicken oder die Markdown-Dateien direkt bearbeiten.
 
-| Weg | Ausgelöst durch | Wer schreibt |
-|---|---|---|
-| **Modell-Werkzeuge** | das Modell hält etwas für behaltenswert | `memoir_note` / `memoir_recall` / `memoir_forget` |
-| **Die Seite** | Klick auf „Neuer Eintrag“ oder Markdown-Bearbeitung | Sie |
-| **Automatisches Umschreiben** | am Ende jeder Runde | das Modell liest und liefert eine vollständige Neufassung |
+Automatisches Umschreiben: zwanzig Sekunden, nachdem eine Runde verstummt ist, wird das ganze Buch gelesen und eine umgeschriebene Fassung geschrieben.
 
-> Die ersten beiden **hängen an**. Der dritte **schreibt um**. Er ist der Kern — er verhindert, dass das Heft nur noch wächst.
+Die ersten beiden hängen an. Die dritte schreibt um, und darum geht es im Ganzen: sie verhindert, dass das Dokument nur noch wächst.
 
----
+## 🔄 Automatisches Umschreiben
 
-## 🔄 Das automatische Umschreiben
+Das Modell bekommt den vollständigen aktuellen Inhalt des Buchs plus den neuen Gesprächsabschnitt und liefert eine komplett umgeschriebene Fassung zurück. Zusammenführen, Streichen, Umformulieren und Ergänzen geschehen alle in diesem einen Schritt.
 
-Sobald eine Runde zur Ruhe kommt (standardmäßig 20 Sekunden), **schreibt der Hintergrund das ganze Heft um**:
+Ein paar Sicherungen:
 
-> Das Modell bekommt *das Heft im aktuellen Zustand* plus *diesen Gesprächsabschnitt* und muss **die vollständig umgeschriebene Fassung** liefern — zusammenführen, was zusammengehört; kürzen, was veraltet ist; streichen, was tot ist; ergänzen, was neu ist. Auch Kategorien und Abschnitte dürfen ihre Form ändern.
+- Ein Cursor pro Sitzung verbraucht nur Ereignisse seit dem letzten Lauf, derselbe Abschnitt wird also nie zweimal umgeschrieben
+- Ein fehlgeschlagener Lauf rückt den Cursor nicht vor; das Ende der nächsten Runde versucht denselben Abschnitt erneut
+- Ein Abschnitt unter 400 Zeichen wird übersprungen, der Cursor rückt trotzdem vor
+- Gleichzeitige Sitzungen stellen sich an, statt alle auf einmal zu starten
+- Lassen sich die Kategorien nicht auswerten, wird nichts geschrieben; sinkt die Gesamtzahl der Einträge um mehr als die Hälfte (ab 6), wird das Umschreiben rundweg abgelehnt
 
-Es verhält sich also wie ein **Lektor**, der ein Lebenddokument pflegt — nicht wie ein Schreiber, der ein Protokoll verlängert.
-
-**Leitplanken:**
-
-- **Cursor je Sitzung** — nur neue Ereignisse werden verarbeitet, ein Abschnitt wird nie doppelt umgeschrieben
-- **Ein Fehler schiebt den Cursor nicht weiter** — die nächste Runde versucht denselben Abschnitt erneut
-- **Zu wenig Inhalt wird übersprungen** (standardmäßig 400 Zeichen), der Cursor läuft trotzdem weiter
-- **Global serialisiert** — mehrere gleichzeitig endende Sitzungen stellen sich in eine Warteschlange
-- **Zwei Sicherheitsnetze**: lassen sich keine Kategorien auslesen, wird nichts geschrieben; fällt die Eintragszahl um mehr als die Hälfte (ab 6 Einträgen), wird das Umschreiben abgelehnt und die Datei bleibt unangetastet
-
-Ohne `llm`-Dienst (kein Modell konfiguriert) wird dieser Weg still übersprungen; Werkzeuge und Seite arbeiten weiter.
-
-### Kapazitätsauslöser
-
-Umschreiben allein reicht nicht: für sich genommen bessert es nur nach, während die Zahl weiter steigt. Daher zwei Schwellwerte:
-
-| Schwellwert | Standard | Bedeutung |
-|---|---|---|
-| `pageEntryLimit` | 12 | Einträge in einer einzelnen Kategorie |
-| `bookEntryLimit` | 40 | Einträge im ganzen Heft |
-
-**Wird einer überschritten**, trägt dieses Umschreiben zusätzlich einen **Zwangs-Aufräumbefehl**: wie viele Einträge es gibt, welche Kategorien zu voll sind — und drei Forderungen:
-
-1. **Zusammenfassen** — Synonyme und eng Verwandtes zu einem Satz
-2. **Kürzen** — weitschweifige Einträge auf ihr Ergebnis eindampfen
-3. **Abschnitte bilden** — eine übervolle Kategorie mit `##` aufteilen statt zwanzig Einträge flach zu lassen
-
-**Unterhalb der Schwellwerte wird nichts davon angehängt** und das Umschreiben bleibt leicht.
-
----
+Jeder Eintrag trägt zwei Marken. `conf` ist die Zuverlässigkeit: `high` für etwas, das Sie selbst gesagt haben, `med` für etwas aus dem Gespräch Gezogenes, `low` für etwas vom Modell Erschlossenes. Wenn Platz gebraucht wird, geht `low` zuerst. `pin` heißt angeheftet: ein angehefteter Eintrag muss ein Umschreiben unverändert überstehen. Es gibt höchstens eine Handvoll davon.
 
 ## ⚙️ Einstellungen
 
-Oben rechts in der Seite: **⚙**.
+Das Zahnrad oben rechts. Änderungen liegen in `.settings.json` im Gedächtnisverzeichnis, bei Ihren Daten, überstehen also einen Profilwechsel.
 
-### Schreibschalter
+Ist der Hauptschalter fürs Schreiben aus, wird das Gedächtnis nicht mehr in den Prompt eingefügt, die drei Werkzeuge verweigern die Ausführung, Schreibzugriffe von der Seite und über HTTP antworten mit 403, und das automatische Umschreiben hört auf.
 
-Aus bedeutet **es wird nichts gelesen und nichts geschrieben**:
+Das Modell fürs Umschreiben wird aus dem gewählt, was der Host bereits registriert hat. Das Plugin ruft `ctx.llm.listProviders()` und `ctx.llm.listModels(provider)` auf und macht daraus eine Auswahlliste, sodass Sie nie einen Anbieternamen oder eine Modellkennung tippen. Alles, was in DSH angebunden ist, erscheint dort, ob eingebaut, lokal oder eine Fremd-API. Unter der Liste bleiben zwei Felder für das, was der Host nicht auflistet.
 
-- das Gedächtnis wird nicht mehr in den Systemprompt eingefügt
-- alle drei Werkzeuge verweigern die Ausführung
-- Schreibzugriffe von Seite und HTTP-API antworten mit 403
-- das automatische Umschreiben stoppt
+Das Denken ist standardmäßig aus. Umschreiben ist Aufräumen, nicht Lösen, und ein denkendes Modell verbraucht das Ausgabebudget im Nachdenken und liefert gar keinen Text.
 
-Praktisch für „diese Unterhaltung nicht mitschreiben“ — viel leichter als eine Deinstallation.
-
-### Welches Modell umschreibt
-
-Die erste Auswahlliste **zeigt alle beim Host bereits registrierten Modelle** — eines anklicken, und die beiden Felder darunter füllen sich selbst.
-
-**Sie müssen weder Anbieternamen noch Modellkennung kennen.** Die Liste stammt vom Host:
-
-```ts
-ctx.llm.listProviders()          // alle registrierten Anbieter
-ctx.llm.listModels(provider)     // die Modelle je Anbieter
-```
-
-Was immer Sie nutzen wollen — **sofern es in DSH eingebunden ist** — erscheint dort:
-
-- **In DSH eingebaut** — z. B. `deepseek-flash` unter `deepseek-official`
-- **Ein lokales Modell** — der lokale Inferenzdienst, den Sie in DSH eingebunden haben (Ollama, llama.cpp, …)
-- **Eine Fremd-API** — jeder OpenAI-kompatible Endpunkt, der in DSH als Anbieter eingerichtet ist
-
-| Feld | Bedeutung |
-|---|---|
-| **Anbieter** | leer = dem Standardmodell des Agenten folgen; oder aus der Liste wählen |
-| **Modell** | leer = Standard; oder aus der Liste wählen |
-| **Denkaufwand** | `aus` / `niedrig` / `hoch` / `maximal` / `nicht senden` |
-
-Unter der Liste bleiben zwei **Felder zum Eintippen**, für alles, was der Host nicht auflistet (etwa dynamisch erzeugte Kennungen). **Beide Wege funktionieren.**
-
-> Das Plugin **stellt selbst keine Netzwerkanfragen**; alles läuft über die `llm`-Fähigkeit des Hosts. Was wählbar ist, hängt davon ab, was Sie in DSH angebunden haben. Ist beim Host nichts registriert, sagt die Liste das, statt leer zu bleiben.
-
-**Warum ist das Denken standardmäßig aus?** Umschreiben ist **Aufräumen**, nicht **Lösen**. Gemessen: ein denkendes Modell verbrennt das Ausgabebudget im Nachdenken und hat dann nichts mehr für den Text — Symptom: „Anfrage erfolgreich, aber kein einziger Textblock“. Ausgeschaltet geht das ganze Budget in den Text.
----
-
-## 🌍 Zwei getrennte Sprachen
-
-Das sind **zwei verschiedene Schalter**, die man leicht für einen hält:
-
-| | Was er steuert | Standard |
-|---|---|---|
-| **Oberflächensprache** | Schaltflächen, Beschriftungen, Hinweise — der **Oberflächentext** | `en` (English) |
-| **Sprache der Einträge** | **die Wörter in den md-Dateien**, einschließlich Kategorie- und Abschnittsnamen | `en` (English) |
-
-### Oberflächensprache
-
-**简体中文 · English · Français · Deutsch · 日本語**
-
-- **Standard ist Englisch** (das Paket wird öffentlich verteilt)
-- Alternativ **Dem Host folgen** — die Sprache, die DSH verwendet
-- Der Wechsel geschieht **vollständig im Browser**: kein Neustart, kein Weg zum Server
-
-### Sprache der Einträge
-
-Einmal gesetzt, bekommt der Umschreibungs-Prompt eine Zeile mehr:
-
-> 【语言】这份记忆册的内容一律用 X 写，分类名和小节名也是，不要混用其他语言。
-
-**Die Oberfläche bleibt unberührt** — sie behält ihre eigene Sprache.
-
-- **Standard ist Englisch**
-- Mit **Uneingeschränkt** wird die Zeile gar nicht gesendet; das Modell folgt dann der Gesprächssprache
-- Ohne `llm`-Dienst kann die Zeile nichts bewirken — dann läuft gar keine Umschreibung
----
+Oberflächensprache und Sprache der Einträge sind zwei getrennte Schalter. Der erste ändert Schaltflächen und Beschriftungen; der zweite bestimmt, welche Sprache in die Dateien geschrieben wird, einschließlich Kategorie- und Abschnittsnamen. Beide stehen standardmäßig auf Englisch.
 
 ## 🔧 Konfiguration
 
-Alles, was je nach Einsatz variiert, steht in `cordis.patch.yml` (oder einer Überlagerung im Profil). Nichts ist fest verdrahtet.
+Die Bereitstellungskonfiguration steht in `cordis.patch.yml`:
 
 ```yaml
 - id: memoir
@@ -245,115 +107,71 @@ Alles, was je nach Einsatz variiert, steht in `cordis.patch.yml` (oder einer Üb
     autoDistill: true          # am Ende jeder Runde umschreiben
     distillDebounceMs: 20000   # Ruhezeit vor dem Umschreiben (ms)
     distillMinChars: 400       # kürzere Abschnitte überspringen
-    distillMaxItems: 60        # Obergrenze an Einträgen, dem Modell vorgeschlagen
-    distillMaxTokens: 8000     # Untergrenze des Ausgabebudgets (wächst mit dem Heft)
-    distillReasoningEffort: off # Umschreiben braucht kein Nachdenken
-    memoryLanguage: ''       # language used for the saved text; empty = unrestricted
-    pageEntryLimit: 12         # darüber in einer Kategorie → Zwangs-Aufräumen
-    bookEntryLimit: 40         # darüber im Heft → Zwangs-Aufräumen
+    distillMaxItems: 60        # Obergrenze für Einträge im ganzen Buch
+    distillMaxTokens: 8000     # Untergrenze des Ausgabebudgets, steigt mit der Größe
+    distillReasoningEffort: off # Umschreiben braucht kein Denken
+    memoryLanguage: ''         # Sprache der Einträge; leer = uneingeschränkt
+    pageEntryLimit: 12         # Einträge je Kategorie, die ein Aufräumen auslösen
+    bookEntryLimit: 40         # Einträge im Buch, die ein Aufräumen auslösen
 ```
 
-**Nach Konfigurationsänderungen neu starten.** Dieselbe Regel wie beim Code: Hot Reload gibt es nur bei der Installation.
+Danach ist ein Neustart nötig, genau wie bei Codeänderungen.
 
-### In der Oberfläche geänderte Einstellungen
+## 📂 Wie die Dateien aussehen
 
-`cordis.patch.yml` enthält die **Bereitstellungs**-Konfiguration; was Sie unter ⚙ ändern, sind **Laufzeiteinstellungen** in `.settings.json` im Gedächtnisverzeichnis — sie wandern mit Ihren Daten, überstehen Profilwechsel und werden von Plugin-Updates nicht überschrieben.
+Eine Markdown-Datei pro Kategorie. Reiner Text, in jedem Editor zu öffnen, versionsverwaltbar. Keine Datenbank, kein Cache, kein eigenes Format.
 
-| Schlüssel | Standard | Bedeutung |
-|---|---|---|
-| `enabled` | `true` | Hauptschalter fürs Schreiben; aus = weder lesen noch schreiben |
-| `distillProvider` | `""` | Anbieter fürs Umschreiben; leer = Agent-Standard |
-| `distillModel` | `""` | Modell fürs Umschreiben; leer = Standard |
-| `distillReasoningEffort` | `""` | überschreibt den Denkaufwand aus der Konfiguration |
-| `locale` | `"en"` | Oberflächensprache; `""` = dem Host folgen |
-| `memoryLanguage` | `"en"` | Sprache der Einträge; `""` = uneingeschränkt |
-
-**Die Standardwerte sind englische Oberfläche + englische Einträge** (das Paket wird öffentlich verteilt). Sie gelten aber **nur, wenn die Datei nicht existiert** — sobald sie existiert, gilt sie: „Dem Host folgen“ oder „Uneingeschränkt“ wird als leerer String gespeichert und nie überschrieben.
-
----
-
-## 📂 Speicherformat
+Die Metadaten eines Eintrags stehen in HTML-Kommentaren und stören das Lesen nicht:
 
 ```
-$DSH_HOME/memoir/          ← Standardort; über memoryDir änderbar
-├── .order                 ← Reihenfolge der Kategorien, eine Kennung je Zeile
-├── .settings.json         ← in der Seite geänderte Einstellungen
-├── user.md                ← eine Datei = eine Kategorie
-└── ...
+- Fragt vor jedem Download und will die Größe in GB
+  <!-- memoir id=8daa8849 | imp=5 | conf=high | at=2026-10-09 | src=Nutzer hat es gesagt | pin -->
 ```
 
-**Keine Datenbank, kein Index, kein Cache.** Jedes Lesen und Schreiben geht direkt auf die Platte — die Dateien sind winzig, und der Gewinn ist, dass eine Handänderung beim nächsten Neuladen sichtbar ist.
+Eine Zeile, die mit `- ` beginnt, fügt einen Eintrag hinzu. Der Parser kennt drei Zeilenarten (`# Kategorie`, `## Abschnitt`, `- Eintrag`) und ignoriert alles andere.
 
-**Regeln für Handarbeit:**
+## ❓ Fragen
 
-| Zeile | Bedeutung |
-|---|---|
-| `# Titel` | Anzeigename der Kategorie (Kopfzeile, übersprungen) |
-| `## Abschnitt` | Abschnitt der zweiten Ebene; folgende Einträge gehören dazu |
-| `- Text` | eine Erinnerung |
-| `  <!-- memoir … -->` | Metadaten des vorigen Eintrags (weglassbar) |
-| um 2+ Leerzeichen eingerückte Zeilen | Fortsetzung des vorigen Eintrags |
-| alles andere (leer, Fließtext, `###`) | Formatierung, ignoriert |
+**Kollidiert das mit anderen Gedächtniseinrichtungen.** Nein. Memoir behandelt nur die langfristige, makroskopische Ebene: wer der Nutzer ist, wer der Assistent ist, was läuft, welche großen Entscheidungen gefallen sind. Kurzfristiges und Prozedurales wie technische Details, Fallstricke und Fortschrittsprotokolle liegt außerhalb und wird hier nie geschrieben. Die Daten liegen in einem eigenen Verzeichnis.
 
-**Kennungen leiten sich vom Inhalt ab**: bleibt der Text gleich, bleibt die Kennung gleich. Deshalb zerstört ein vollständiges Umschreiben nie Ihre Position in der Seite.
+**Wächst das nicht einfach immer weiter.** Nein. Es wird umgeschrieben statt angehängt, seine Länge folgt also dem Inhalt und nicht der Geschichte. Über 12 Einträge in einer Kategorie oder 40 im Buch lösen ein erzwungenes Aufräumen aus.
 
----
+**Was, wenn eine Erinnerung falsch umgeschrieben wird.** Jede Kategoriedatei lässt sich direkt bearbeiten, und ein Neuladen der Seite übernimmt die Änderung. Das nächste Umschreiben respektiert geänderte Kategorienamen. Wichtige Einträge lassen sich mit `pin` anheften.
 
-## ❓ Häufige Fragen
+**Werden Daten irgendwohin gesendet.** Nein. Das Plugin stellt selbst keine Netzwerkanfragen; das Umschreiben läuft über die `llm`-Fähigkeit des Hosts.
 
-**Kollidiert es mit anderen Gedächtnisfunktionen?**
-Nein. Memoir behandelt nur die **langfristige, makroskopische** Ebene — wer der Nutzer ist, wer der Assistent ist, was läuft, welche großen Entscheidungen fielen. Kurzfristiges und Prozedurales (technische Details, Fallstricke, Fortschrittsprotokolle) liegt außerhalb und wird hier nie geschrieben. Die Daten liegen in einem eigenen Verzeichnis, ohne systemübergreifendes Lesen oder Schreiben.
-
-**Warum stehen keine technischen Details in meinem Heft?**
-Absicht. Technische Details begraben die Karte „Zum Nutzer“ unter zwanzig Kommandozeilen, und dann liest sie niemand. Das gehört zu einem anderen Gedächtnissystem.
-
-**Muss ich nach dem Bearbeiten des Markdown neu starten?**
-Nein. Gelesen wird bei jeder Anfrage; Seite neu laden genügt.
-
-**Verliere ich Daten, wenn ich den Schreibschalter ausschalte?**
-Nein. Er stoppt Lesen und Schreiben; die Dateien bleiben unverändert und beim Einschalten geht es weiter.
-
-**Stellt es heimlich Netzwerkanfragen?**
-Nein. Abgesehen von der `llm`-Fähigkeit des Hosts zum Umschreiben stellt es keine eigenen Anfragen, liest nichts außerhalb des Gedächtnisverzeichnisses und sammelt keine Telemetrie.
-
-**Gehen meine Erinnerungen an einen Modellanbieter?**
-**Ja** — der Gedächtnisindex wird in jede Modellanfrage eingefügt, und ein Umschreiben sendet das ganze Heft. Also **niemals Passwörter, Token oder private Schlüssel ins Gedächtnis**. Siehe [SECURITY.md](SECURITY.md).
-
----
+**Kann ich das Gedächtnis mitnehmen.** Ja. Der ganze Speicher ist ein Verzeichnis; kopieren Sie es.
 
 ## 🛠 Entwicklung
 
 ```sh
-npm test                # alle 259 Offline-Tests
-npm run test:store      # Speicher: Analyse, Dedupe, Verschieben, Suche, Kürzung
+npm test                # alle 259 Offline-Selbsttests
+npm run test:store      # Speicher: Auswertung, Dedupe, Verschieben, Suche
 npm run test:plugin     # Host-Hälfte: Registrierungen, Werkzeuge, Prompt, HTTP-Routen
-npm run test:client     # Browser-Hälfte: rendert das echte Bundle mit React-Ersatz
-npm run test:distill    # Umschreiben: Ausgabeanalyse, Entprellung, Cursor, Schwellwerte
+npm run test:client     # Seiten-Hälfte: echtes Bundle gegen einen React-Ersatz
+npm run test:distill    # Umschreiben: Auswertung, Entprellung, Cursor, Wiederholungen
 ```
 
-Alles läuft offline: kein DSH-Host nötig, kein echtes Profil wird berührt.
+Die Tests laufen vollständig offline. Sie brauchen keinen DSH-Host und berühren kein echtes Profil.
 
-**Nach Änderungen am Quelltext** (Windows):
+Nach Änderungen am Quelltext (Windows):
 
 ```powershell
 & .\scripts\sync.ps1
 ```
 
-pnpm verlinkt `file:`-Abhängigkeiten per Hardlink: Quelltext bearbeiten bricht den Link, und die installierte Kopie veraltet — synchronisieren, dann den Client neu starten.
+Wenn pnpm ein lokales Paket über `file:` installiert, legt es harte Links an. Änderungen am Quelltext brechen den Link, und die installierte Kopie aktualisiert sich nicht mehr, also sind Synchronisieren und Neustart beide nötig.
 
-**Aufbau:**
+Aufbau:
 
 ```
-src/       Implementierung (index = Host, distill = Umschreiben, client = Browser)
-test/      Offline-Tests
+src/       die Umsetzung (index = Host-Hälfte, distill = Umschreiben, client = Seiten-Hälfte)
+test/      Offline-Selbsttests
 docs/      Notizen zu Entwurf und Format
-scripts/   Synchronisationsskript, Live-Smoke-Test
+scripts/   Synchronisationsskript, Smoke-Test gegen einen laufenden Client
 ```
 
-Mehr in [CONTRIBUTING.md](CONTRIBUTING.md) und [docs/](docs/):
-[Entwurf](docs/design.md) · [Speicherformat](docs/storage-format.md) · [Konfiguration](docs/configuration.md).
-
----
+Mehr im Detail in [CONTRIBUTING.md](CONTRIBUTING.md) und [docs/](docs/): [Entwurf](docs/design.md), [Speicherformat](docs/storage-format.md), [Konfiguration](docs/configuration.md).
 
 ## 📄 Lizenz
 
